@@ -1,0 +1,30 @@
+/* src/components/Header.css */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f9fa; /* Light background color */
+    border-bottom: 1px solid #ddd; /* Light border for separation */
+  }
+  
+  header img {
+    width: 100px; /* Adjust width as needed */
+  }
+  
+  nav {
+    display: flex;
+    gap: 20px; /* Space between links */
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: #007bff; /* Link color */
+    font-weight: bold;
+  }
+  
+  nav a:hover {
+    text-decoration: underline; /* Underline on hover */
+  }
+  

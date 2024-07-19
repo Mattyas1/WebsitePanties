@@ -1,0 +1,23 @@
+
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh; /* Ensure the container takes full viewport height */
+    text-align: center;
+    padding: 20px;
+    background-color: #f0f2f5;
+}
+
+.login-container h1 {
+    font-size: 2.5rem; 
+    margin-bottom: 10px;
+}
+
+.register-link {
+    margin-top: 1em;
+    font-size: 1em;
+    color: blue;
+  }
