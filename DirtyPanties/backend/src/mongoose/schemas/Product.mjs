@@ -40,11 +40,11 @@ const ProductSchema = new mongoose.Schema({
     },
     required: true,
   },
-  // Category-specific fields
   model: {
     type: String,
     trim: true,
   },
+  // Category-specific fields
   warranty: {
     type: String,
     trim: true,
@@ -66,7 +66,6 @@ ProductSchema.pre('save', function(next) {
     this.size = undefined;
     this.material = undefined;
   } else if (this.category === 'Clothing') {
-    this.model = undefined;
     this.warranty = undefined;
   }
 

@@ -32,7 +32,7 @@ const PostProduct = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log(images)
+    console.log(images);
     e.preventDefault();
     const formData = new FormData();
     for (let key in product) {
@@ -133,19 +133,19 @@ const PostProduct = () => {
             required
           />
         </label>
+        <label>
+          Model:
+          <input
+            type="text"
+            name="model"
+            value={product.model}
+            onChange={handleChange}
+          />
+        </label>
 
         {/* Affichage conditionnel des champs spécifiques */}
         {product.category === 'Toy' && (
           <>
-            <label>
-              Model:
-              <input
-                type="text"
-                name="model"
-                value={product.model}
-                onChange={handleChange}
-              />
-            </label>
             <label>
               Warranty:
               <input

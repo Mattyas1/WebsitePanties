@@ -1,40 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import './ViewProduct.css';
-
-// Example product data
-const products = [
-  { id: 1, name: 'Product 1', price: 10, description: 'Description for Product 1', image: 'https://via.placeholder.com/150' },
-  { id: 2, name: 'Product 2', price: 20, description: 'Description for Product 2', image: 'https://via.placeholder.com/150' },
-  // Add more products here
-];
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../constants';
+import './ViewProduct.css'; // Make sure to create this CSS file
 
 const ViewProduct = () => {
-  const { id } = useParams();
-  const [product, setProduct] = useState(null);
+  const location = useLocation();
   const navigate = useNavigate();
+  const product = location.state?.product;
 
-  useEffect(() => {
-    // Simulate fetching product data based on the id
-    const foundProduct = products.find(p => p.id === parseInt(id, 10));
-    setProduct(foundProduct);
-  }, [id]);
-
-  const handleBackClick = () => {
-    navigate(-1); // Go back to the previous page
-  };
-
-  if (!product) return <div>Loading...</div>;
+  if (!product) {
+    return <div>No product data found.</div>;
+  }
 
   return (
-    <div className='view-product'>
-    <button className='back-button' onClick={handleBackClick}>
-        Back
-      </button>
-      <h1>{product.name}</h1>
-      <img src={product.image} alt={product.name} />
-      <p>Price: ${product.price}</p>
-      <p>Description: {product.description}</p>
+    <div className="view-product-container">
+      <button className="back-button" onClick={() => navigate(-1)}>Back</button>
+      <div className="product-image">
+        <img src={`${API_BASE_URL}/${product.images[0]}`} alt={product.name} />
+      </div>
+      <div className="product-details">
+        <h1 className="product-title">{product.name}</h1>
+        <p className="product-price">Price: ${product.price}</p>
+        <p className="product-description">Description: {product.description}</p>
+        <p className="product-category">Category: {product.category}</p>
+        {/* Add more product details as needed */}
+      </div>
     </div>
   );
 };

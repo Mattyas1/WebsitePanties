@@ -1,54 +1,63 @@
+/* src/components/ProductList/ProductList.css */
+
 .product-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
-  }
-  
-  .product-item {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 16px;
-    text-align: center;
-    width: 200px;
-    background-color: #fff;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  
-  .product-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  .product-item img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-  }
-  
-  .product-item h2 {
-    font-size: 1.2em;
-    margin: 12px 0;
-  }
-  
-  .product-item p {
-    color: #555;
-  }
-  
-  .product-item a {
-    display: inline-block;
-    margin-top: 12px;
-    padding: 8px 16px;
-    text-decoration: none;
-    color: #007bff;
-    border: 1px solid #007bff;
-    border-radius: 4px;
-    transition: background-color 0.2s, color 0.2s;
-  }
-  
-  .product-item a:hover {
-    background-color: #007bff;
-    color: #fff;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+}
+
+.product-item {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  background-color: #fff;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+}
+
+.product-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.product-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover; /* Ensures image covers the area without distortion */
+  max-height: 200px; /* Restrict image height to maintain card layout */
+}
+
+.product-item h2 {
+  font-size: 1.2em;
+  margin: 12px 0;
+  text-align: center;
+}
+
+.product-item p {
+  color: #555;
+  margin: 0;
+  font-size: 1em;
+}
+
+.product-item a {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #007bff;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.product-item a:hover {
+  background-color: #007bff;
+  color: #fff;
+}

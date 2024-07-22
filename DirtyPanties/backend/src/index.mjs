@@ -8,9 +8,16 @@ import newUserRouter from "./routes/newUser.mjs";
 import { routerWithoutSession } from "./routes/auth.mjs";
 import cors from "cors"
 import bodyParser from "body-parser";
+import path from 'path';
+import { fileURLToPath } from "url";
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express()
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 mongoose.connect("mongodb://localhost:27017/DirtyPanties");
 
 const db = mongoose.connection;

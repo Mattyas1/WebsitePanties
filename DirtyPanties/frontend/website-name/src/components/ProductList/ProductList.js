@@ -1,23 +1,24 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ProductList.css';
+import { API_BASE_URL } from '../../constants';
 
 const ProductList = ({ products }) => {
   const navigate = useNavigate();
 
-  const handleProductClick = (productId) => {
-    navigate(`/viewproduct/${productId}`);
+  const handleProductClick = (product) => {
+    navigate(`/viewproduct/${product._id}`, { state: { product } });
   };
 
   return (
     <div className='product-list'>
       {products.map(product => (
         <div
-          key={product.id}
+          key={product._id} // Assuming _id is used as a unique identifier
           className='product-item'
-          onClick={() => handleProductClick(product.id)}
+          onClick={() => handleProductClick(product)}
         >
-          <img src={product.image} alt={product.name} />
+          <img src={`${API_BASE_URL}/${product.images[0]}`} alt={product.name} />
           <h2>{product.name}</h2>
           <p>${product.price}</p>
         </div>
