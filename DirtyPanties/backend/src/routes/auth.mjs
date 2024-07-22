@@ -14,6 +14,7 @@ export const routerWithoutSession = Router();
 
 
 routerWithoutSession.post("/api/auth", checkSchema(AuthValidationSchema), (req, res, next) => {
+    console.log("LOGGING IN")
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -36,15 +37,14 @@ routerWithoutSession.post("/api/auth", checkSchema(AuthValidationSchema), (req, 
     })(req, res, next);
 });
 
-authRouter.post('/api/auth/refresh', async (req, res) => {
+authRouter.post('/api/auth/refreshToken', async (req, res) => {
+  console.log("Refresh token")
     const { refreshToken } = req.body;
-    console.log(refreshToken)
   
     if (!refreshToken) return res.status(403).send({ message: 'No token provided.' });
   
     try {
       const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET);
-      console.log(decoded);
       const user = await User.findOne({ _id: decoded.id, refreshToken });
       
   
@@ -53,7 +53,7 @@ authRouter.post('/api/auth/refresh', async (req, res) => {
         return res.status(403).send({ message: 'Invalid refresh token.' })
       };
   
-      const accessToken = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '1h' });
+      const accessToken = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '2h' });
   
       res.json({ accessToken });
     } catch (err) {
@@ -62,8 +62,16 @@ authRouter.post('/api/auth/refresh', async (req, res) => {
     }
   });
 
-  authRouter.post('/api/auth/verify', VerifyTokenMiddleware, (req, res) => {
-    console.log("User connected : ", req.user._id)
-res.status(200).json({ message: 'Token verified.', userId: req.user._id });
+  authRouter.get('/api/auth/verifyToken', VerifyTokenMiddleware,async  (req, res) => {
+    console.log("VerifyToken middleware Passed")
+    const user = await User.findById(req.userId);
+    req.logIn(user, (err) => {
+      if (err) {
+        return res.status(500).json({ message: 'Login failed' });
+      }
+
+    console.log("User connected through AutoLogin: ", req.user._id);
+    res.status(200).json({message : "Token Verified", user});
+    });
   });
   

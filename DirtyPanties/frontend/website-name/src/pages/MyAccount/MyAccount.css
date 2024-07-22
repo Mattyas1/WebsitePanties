@@ -1,0 +1,62 @@
+/* MyAccount.css */
+
+.my-account-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+  padding: 20px;
+}
+
+.my-account-content {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+
+.my-account-content h1 {
+  margin-bottom: 30px;
+  font-size: 2.2em;
+  font-weight: bold;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.logout-button,
+.settings-button {
+  padding: 12px 24px;
+  font-size: 1.1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.logout-button {
+  background-color: #d9534f;
+  color: #fff;
+}
+
+.logout-button:hover {
+  background-color: #c9302c;
+  transform: scale(1.05);
+}
+
+.settings-button {
+  background-color: #0275d8;
+  color: #fff;
+}
+
+.settings-button:hover {
+  background-color: #025aa5;
+  transform: scale(1.05);
+}

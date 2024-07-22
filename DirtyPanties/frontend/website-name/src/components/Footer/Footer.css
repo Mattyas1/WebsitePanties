@@ -1,0 +1,13 @@
+footer {
+    background-color: #f1f1f1; /* Light gray background color for the footer */
+    padding: 20px 0; /* Vertical padding */
+    text-align: center; /* Center text horizontally */
+    position: relative; /* Ensures footer is positioned relative to its normal position */
+  }
+  
+.footer-container {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    height: 100%;
+}

@@ -1,16 +1,17 @@
 // src/pages/Login.js
-import React, { useState } from 'react';
+import React, { useState, useContext} from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LoginForm from '../../components/LoginForm/LoginForm';
 import Cookies from 'js-cookie';
 import "./Login.css"
 import { API_BASE_URL } from '../../constants';
-//import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 const Login = () => {
-  const [loggedInUser, setLoggedInUser] = useState(null);
+  const {setUser, setIsAuthenticated, isAuthenticated } = useContext(AuthContext);
   const [isPosting, setIsPosting] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = async (username, password) => {
     setIsPosting(true)
@@ -21,10 +22,11 @@ const Login = () => {
       Cookies.set('accessToken', accessToken, { expires: 1 / 24 }); // Expires in 1 hour
       Cookies.set('refreshToken', refreshToken, { expires: 200 }); // Expires in 200 days
 
+      setUser(user);
+      setIsAuthenticated(true);
       console.log('Login success:', response.data);
-
-      setLoggedInUser(user.username);
       setIsPosting(false);
+      navigate('/myaccount')
 
       //navigate('/main');  to be defined later
     } catch(error) {
@@ -42,15 +44,15 @@ const Login = () => {
   return (
     <div className='login-container'>
       <h1>Login</h1>
-      {!loggedInUser ? (
+      {!isAuthenticated ? (
         <>
-          <LoginForm onLogin={handleLogin} isPosting= {isPosting}/>
+          <LoginForm onLogin={handleLogin} isPosting={isPosting} />
           <p className="register-link">
-              Not a user yet? <Link to="/register">Click here to create an account</Link>
+            Not a user yet? <Link to="/register">Click here to create an account</Link>
           </p>
         </>
       ) : (
-        <p>Welcome back, {loggedInUser}! Let's go buy some dirty panties now !!</p>
+        <p>Already Logged In</p>
       )}
     </div>
   );

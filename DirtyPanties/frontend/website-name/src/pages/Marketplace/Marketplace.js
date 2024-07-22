@@ -1,6 +1,6 @@
 // src/pages/Marketplace.js
 import React from 'react';
-import ProductList from '../../components/ProductList';
+import ProductList from '../../components/ProductList/ProductList';
 import "./Marketplace.css"
 
 const products = [
