@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ProductList from '../../components/ProductList/ProductList';
 import "./Marketplace.css";
+import axios from 'axios';
 import { API_BASE_URL } from '../../constants';
 
 const Marketplace = () => {
@@ -11,11 +12,8 @@ const Marketplace = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/products`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
+        const response = await axios.get(`${API_BASE_URL}/api/products`);
+        const data = response.data;
         setProducts(data);
       } catch (error) {
         setError(error.message);

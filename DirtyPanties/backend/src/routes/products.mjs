@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Product } from "../mongoose/schemas/Product.mjs";
+import  Product  from "../mongoose/schemas/Product.mjs";
 import multer from "multer";
 import fs from "fs";
 import path from "path";
@@ -35,7 +35,23 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Middleware to handle file uploads and form data
+
+router.get('/api/products/:id',async (req,res)=> {
+  const {id} = req.params;
+  try {
+    const product = await Product.findById(id)
+
+    if (!product) {
+      // Si le produit n'existe pas, envoyer un code de réponse 404 (Not Found)
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    res.status(200).json(product);
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 router.post('/api/products/new', (req, res) => {
   // Step 1: Create an initial product instance
   const product = new Product();
@@ -83,6 +99,9 @@ router.post('/api/products/new', (req, res) => {
     res.status(201).json(product);
   });
 });
+
+
+
 
 router.get('/api/products', async (req, res) => {
   try {

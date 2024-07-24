@@ -2,7 +2,7 @@ import {Router} from "express";
 import {NewUserValidationSchema } from "../utils/ValidationSchemas.mjs";
 import "../strategies/local-strategy.mjs";
 import { matchedData, validationResult} from "express-validator";
-import {User} from "../mongoose/schemas/User.mjs"
+import User from "../mongoose/schemas/User.mjs"
 import { hashPassword } from "../utils/helpers.mjs";
 
 const router = Router();

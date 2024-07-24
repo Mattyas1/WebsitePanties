@@ -5,7 +5,8 @@ import './Header.css'; // Import the CSS file
 import { AuthContext } from '../../context/AuthContext'; 
 
 const Header = () => {
-  const {isAuthenticated} = useContext(AuthContext);
+  const { isAuthenticated, user } = useContext(AuthContext);
+
   return (
     <header>
       <img src={logo} alt="Logo" />
@@ -13,7 +14,12 @@ const Header = () => {
         <Link to="/">Home</Link>
         <Link to="/marketplace">Marketplace</Link>
         {isAuthenticated ? (
-          <Link to="/myaccount">My Account</Link>
+          <div>
+            <Link to="/myaccount">My Account</Link>
+            <div className="user-coins">
+              {user?.coins !== undefined ? `${user.coins} 🪙` : 'Loading coins...'}
+            </div>
+          </div>
         ) : (
           <Link to="/login">Log in</Link>
         )}

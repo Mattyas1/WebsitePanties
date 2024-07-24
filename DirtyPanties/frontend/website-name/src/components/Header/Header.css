@@ -28,3 +28,8 @@ header {
     text-decoration: underline; /* Underline on hover */
   }
   
+  .user-coins {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #666;
+  }

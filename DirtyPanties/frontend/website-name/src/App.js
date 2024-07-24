@@ -13,8 +13,11 @@ import ViewProduct from './pages/ViewProduct/ViewProduct';
 import PostProductForm from './pages/PostProduct/PostProduct';
 import Settings from './pages/Settings/Settings';
 import {AuthProvider } from './context/AuthContext';
+import axios from 'axios';
 
 const App = () => {
+  axios.defaults.withCredentials = true;
+
 
   return (
     <AuthProvider>

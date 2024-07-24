@@ -1,10 +1,11 @@
 import {Router} from "express";
 import "../strategies/local-strategy.mjs";
-import {User} from "../mongoose/schemas/User.mjs"
+import User from "../mongoose/schemas/User.mjs"
 
 const router = Router();
 
 router.post("/api/user/getUsername", async (req,res) => {
+    console.log("SESSION USER :", req.session)
     try {
         const findUser = await User.findById(req.body.id);
 

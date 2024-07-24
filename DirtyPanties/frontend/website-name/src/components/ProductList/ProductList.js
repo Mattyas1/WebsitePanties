@@ -20,7 +20,7 @@ const ProductList = ({ products }) => {
         >
           <img src={`${API_BASE_URL}/${product.images[0]}`} alt={product.name} />
           <h2>{product.name}</h2>
-          <p>${product.price}</p>
+          <p>Current bid : {product.bid.amount}  coins</p>
         </div>
       ))}
     </div>

@@ -23,7 +23,12 @@ const UserSchema = new mongoose.Schema({
     refreshToken : {
         type: mongoose.Schema.Types.String,
     },
+    coins: {
+        type: mongoose.Schema.Types.Number,
+    }
     
 });
 
-export const User = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
+
+export default User;

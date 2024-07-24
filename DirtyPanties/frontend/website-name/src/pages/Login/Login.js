@@ -12,6 +12,7 @@ const Login = () => {
   const {setUser, setIsAuthenticated, isAuthenticated } = useContext(AuthContext);
   const [isPosting, setIsPosting] = useState(false);
   const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
 
   const handleLogin = async (username, password) => {
     setIsPosting(true)

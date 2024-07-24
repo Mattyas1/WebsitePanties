@@ -12,7 +12,7 @@ const ProductSchema = new mongoose.Schema({
     required: true,
     enum: ['Clothing', 'Toy'],
   },
-  price: {
+  startingPrice: {
     type: Number,
     required: true,
     min: 0,
@@ -44,6 +44,11 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  bid: {
+    amount: { type: Number, default: 0 },
+    bidderId: { type: String, default: '' },
+    date: { type: Date, default: Date.now },
+  },
   // Category-specific fields
   warranty: {
     type: String,
@@ -72,4 +77,6 @@ ProductSchema.pre('save', function(next) {
   next();
 });
 
-export const Product = mongoose.model('Product', ProductSchema);
+const Product = mongoose.model('Product', ProductSchema);
+
+export default Product;
