@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Modal from 'react-modal';
 import { API_BASE_URL } from '../../constants';
 import './ViewProduct.css'; // Make sure to create this CSS file
 import { AuthContext } from '../../context/AuthContext';
@@ -14,6 +15,9 @@ const ViewProduct = () => {
   const [timeRemaining, setTimeRemaining] = useState('');
   const [userBid, setUserBid] = useState('');
   const [biddingError, setBiddingError] = useState(null);
+
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -71,15 +75,20 @@ const ViewProduct = () => {
     setUserBid(value);
   };
 
-  const handleBidSubmit = async () => {
+  const handleBidSubmit = () => {
     if (userBid > user.coins) {
       setBiddingError('Not enough coins');
       return;
-    };
+    }
     if (userBid <= product.bid.amount) {
       setBiddingError('Bid must be higher than the current highest bid');
       return;
-    };
+    }
+    setIsConfirmModalOpen(true);
+  };
+
+  const handleConfirmBid = async () => {
+    setIsConfirmModalOpen(false);
     try {     
       const body = {
         productId: product._id,
@@ -91,12 +100,13 @@ const ViewProduct = () => {
 
       if (response.status !== 200) {
         throw new Error(`Server responded with status code ${response.status}`);
-      };
+      }
 
       const data = response.data;
       setProduct(data.updatedProduct);
       setUser(data.updatedUser);
       setBiddingError(null);
+      setIsSuccessModalOpen(true);
     } catch (error) {
       setBiddingError('Error submitting bid');
     }
@@ -136,6 +146,35 @@ const ViewProduct = () => {
           )}
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      <Modal
+        isOpen={isConfirmModalOpen}
+        onRequestClose={() => setIsConfirmModalOpen(false)}
+        contentLabel="Confirm Bid"
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <h2>Confirm Bid</h2>
+        <p>You are about to bid {userBid} coins for this product. Are you sure?</p>
+        <div className="modal-buttons">
+          <button className='modal-button' onClick={handleConfirmBid}>Confirm</button>
+          <button className= 'modal-button cancel' onClick={() => setIsConfirmModalOpen(false)}>Cancel</button>
+        </div>
+      </Modal>
+
+      {/* Success Modal */}
+      <Modal
+        isOpen={isSuccessModalOpen}
+        onRequestClose={() => setIsSuccessModalOpen(false)}
+        contentLabel="Bid Success"
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <h2>Bid Placed Successfully</h2>
+        <p>Your bid has been placed successfully.</p>
+        <button onClick={() => setIsSuccessModalOpen(false)}>Close</button>
+      </Modal>
     </div>
   );
 };

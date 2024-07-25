@@ -1,0 +1,47 @@
+.success-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f7f7f7;
+    padding: 20px;
+  }
+  
+  .success-title {
+    font-size: 2.5em;
+    color: #4CAF50;
+    margin-bottom: 20px;
+  }
+  
+  .success-message {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+  }
+  
+  .success-details {
+    font-size: 1em;
+    margin-bottom: 30px;
+  }
+  
+  .session-id {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .success-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .success-button:hover {
+    background-color: #45a049;
+  }
+  
