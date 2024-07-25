@@ -1,6 +1,7 @@
 import {Router} from "express";
 import Stripe from 'stripe'; 
 import { STRIPE_PRIVATE_KEY, WEBSITE_URL } from "../config/constants.mjs";
+import User from "../mongoose/schemas/User.mjs";
 
 const router = Router();
 const stripe = new Stripe(`${STRIPE_PRIVATE_KEY}`)
@@ -19,6 +20,7 @@ router.post('/api/coins/pay', async (req,res) => {
                         currency: currency,
                         product_data: {
                             name: 'Coins Purchase',
+                            description: `${coinAmount} Coins`,
                         },
                         unit_amount: Math.round(price*100),
                     },
@@ -32,6 +34,11 @@ router.post('/api/coins/pay', async (req,res) => {
                 userId: userId, 
             },
         });
+
+        const updateUser = await User.findById(userId);
+        updateUser.coins = updateUser.coins + coinAmount;
+        await updateUser.save();
+        console.log("DONE")
 
         res.status(200).json({ id: session.id });
     }catch(error) {

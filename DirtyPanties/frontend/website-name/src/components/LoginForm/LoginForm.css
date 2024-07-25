@@ -1,44 +1,57 @@
 /* src/components/LoginForm.css */
 
 .login-form {
-    max-width: 400px; /* Largeur maximale du formulaire */
-    margin: 0 auto; /* Centrer le formulaire horizontalement */
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9; /* Couleur de fond légère */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre portée légère pour plus de profondeur */
-  }
-  
-  .login-form div {
-    margin-bottom: 15px; /* Espace entre les champs de formulaire */
-  }
-  
-  .login-form label {
-    display: block;
-    margin-bottom: 5px; /* Espace entre l'étiquette et le champ de saisie */
-    font-weight: bold;
-  }
-  
-  .login-form input {
-    width: calc(100%); /* Étendre la largeur des champs de saisie */
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-left: -10px; 
-  }
-  
-  .login-form button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff; /* Couleur de fond du bouton */
-    color: white; /* Couleur du texte du bouton */
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .login-form button:hover {
-    background-color: #0056b3; /* Couleur plus sombre au survol */
-  }
-  
+  max-width: 400px; /* Largeur maximale du formulaire */
+  margin: 0 auto; /* Centrer le formulaire horizontalement */
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9; /* Couleur de fond légère */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre portée légère pour plus de profondeur */
+}
+
+.login-form div {
+  margin-bottom: 15px; /* Espace entre les champs de formulaire */
+}
+
+.login-form label {
+  display: block;
+  margin-bottom: 5px; /* Espace entre l'étiquette et le champ de saisie */
+  font-weight: bold;
+}
+
+.login-form input {
+  width: calc(90%); /* Étendre la largeur des champs de saisie */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff; /* Couleur de fond du bouton */
+  color: white; /* Couleur du texte du bouton */
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background-color: #0056b3; /* Couleur plus sombre au survol */
+}
+
+.forgot-password {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.forgot-password a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}

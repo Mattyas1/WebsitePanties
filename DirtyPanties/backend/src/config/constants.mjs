@@ -9,3 +9,7 @@ export const STRIPE_PRIVATE_KEY = 'sk_test_51Pg2ZvRtj9Cug3j7Ya3QyCCBVNdbiJ9xI5mg
 export const COINS_TO_USD_RATIO = 1;
 
 export const WEBSITE_URL = 'http://localhost:3000';
+
+export const EMAIL_USER = '';
+
+export const EMAIL_PASS = '';

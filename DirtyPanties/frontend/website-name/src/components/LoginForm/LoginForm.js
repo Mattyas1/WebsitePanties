@@ -1,6 +1,7 @@
 // src/components/LoginForm.js
 import React, { useState } from 'react';
-import "./LoginForm.css"
+import { Link } from 'react-router-dom';
+import "./LoginForm.css";
 
 const LoginForm = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -30,6 +31,9 @@ const LoginForm = ({ onLogin }) => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+      </div>
+      <div className="forgot-password">
+        <Link to="/resetpassword">Forgotten Password?</Link>
       </div>
       <button type="submit">Login</button>
     </form>

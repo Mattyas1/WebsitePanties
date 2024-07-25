@@ -11,6 +11,10 @@ const UserSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    resetPassword: {
+        token: { type: String },
+        expires: { type: Date },
+        },
     username: {
         type: mongoose.Schema.Types.String,
         required: true,
@@ -25,8 +29,13 @@ const UserSchema = new mongoose.Schema({
     },
     coins: {
         type: mongoose.Schema.Types.Number,
-    }
-    
+    },
+    role: {
+        type: String,
+        enum: ['user', 'admin', 'partner'], 
+        default: 'user' 
+    },
+
 });
 
 const User = mongoose.model('User', UserSchema);

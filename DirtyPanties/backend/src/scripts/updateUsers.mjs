@@ -11,7 +11,7 @@ const updateProducts = async () => {
 
         // Update all existing users
         await User.updateMany({}, {
-            $set: { coins : 1000 }
+            $set: { role: 'admin' }
         });
 
         console.log('Users updated successfully.');
