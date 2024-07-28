@@ -1,6 +1,9 @@
+import './config/env.mjs'
+
 import mongoose from 'mongoose';
 import Product from '../mongoose/schemas/Product.mjs'; 
-import { MONGO_URI } from '../config/constants.mjs'; 
+
+const MONGO_URI = process.env.MONGO_URI;
 
 const updateProducts = async () => {
     try {

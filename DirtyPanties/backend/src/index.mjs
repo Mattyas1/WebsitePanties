@@ -1,3 +1,5 @@
+import './config/env.mjs'
+
 import express from "express";
 import passport from 'passport';
 import mongoose from "mongoose";
@@ -11,7 +13,9 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import path from 'path';
 import { fileURLToPath } from "url";
-import { MONGO_URI } from "./config/constants.mjs";
+
+const SESSION_SECRET = process.env.SESSION_SECRET
+const MONGO_URI = process.env.MONGO_URI;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,7 +43,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(session({
-    secret: "C8299PzxE7C679CguSA5dn3GFqnse",
+    secret: SESSION_SECRET,
     saveUninitialized: false,
     resave: false,
     store: MongoStore.create({

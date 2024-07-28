@@ -1,5 +1,6 @@
 // src/components/RegisterForm/RegisterForm.js
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from '../../constants';
 import './RegisterForm.css';
@@ -12,6 +13,7 @@ const RegisterForm = () => {
     password: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,6 +31,7 @@ const RegisterForm = () => {
       console.log('Registration success:', response.data);
       alert('Registration successful! Please log in.');
       setIsSubmitting(false);
+      navigate('/login')
     } catch (error) {
       setIsSubmitting(false);
       if (error.response) {

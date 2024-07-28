@@ -3,7 +3,9 @@ import jwt from "jsonwebtoken"
 import {Strategy} from "passport-local"
 import User from "../mongoose/schemas/User.mjs"
 import { comparePassword } from "../utils/helpers.mjs";
-import {JWT_SECRET, JWT_REFRESH_SECRET} from "../config/constants.mjs"
+
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 
 passport.serializeUser((user, done) => {
     done(null, user._id)

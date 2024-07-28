@@ -4,11 +4,11 @@ import passport from "passport";
 import "../strategies/local-strategy.mjs";
 import jwt from "jsonwebtoken"
 import {checkSchema, validationResult} from "express-validator";
-import { JWT_REFRESH_SECRET, JWT_SECRET } from "../config/constants.mjs";
 import  User  from "../mongoose/schemas/User.mjs"
 import VerifyTokenMiddleware from "../middlewares/VerifyTokenMiddleware.mjs"
 
-
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 export const authRouter = Router();
 export const routerWithoutSession = Router();
 

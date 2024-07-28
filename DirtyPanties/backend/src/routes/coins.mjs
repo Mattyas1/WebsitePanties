@@ -1,8 +1,9 @@
 import {Router} from "express";
 import Stripe from 'stripe'; 
-import { STRIPE_PRIVATE_KEY, WEBSITE_URL } from "../config/constants.mjs";
+import { WEBSITE_URL } from "../config/constants.mjs";
 import User from "../mongoose/schemas/User.mjs";
 
+const STRIPE_PRIVATE_KEY = process.env.STRIPE_PRIVATE_KEY;
 const router = Router();
 const stripe = new Stripe(`${STRIPE_PRIVATE_KEY}`)
 

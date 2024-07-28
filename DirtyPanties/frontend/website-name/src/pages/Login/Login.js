@@ -27,7 +27,7 @@ const Login = () => {
       setIsAuthenticated(true);
       console.log('Login success:', response.data);
       setIsPosting(false);
-      navigate('/myaccount')
+      navigate('/marketplace')
 
       //navigate('/main');  to be defined later
     } catch(error) {

@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../config/constants.mjs';
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const VerifyTokenMiddleware = (req, res, next) => {
   const authHeader = req.headers['authorization'];

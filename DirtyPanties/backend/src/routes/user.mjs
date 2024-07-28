@@ -30,11 +30,13 @@ router.post('/api/user/resetPassword', async (req, res) => {
     try {
       const user = await User.findOne({ email: email });
       if (!user) {
+        console.log("User not Found")
         return res.status(404).json({ message: 'Email not found' });
       }
-  
+      console.log("User Found: ", user);
       // Generate a reset token
       const token = crypto.randomBytes(20).toString('hex');
+      console.log("Reset Token : ", token);
   
       // Set the token and its expiration time in the user's document
       user.resetPassword.token = token;
@@ -43,7 +45,8 @@ router.post('/api/user/resetPassword', async (req, res) => {
       await user.save();
   
       // Generate the reset link
-      const resetLink = `${process.env.API_BASE_URL}/reset-password/${token}`;
+      const resetLink = `${WEBSITE_URL}/NewPassword/${token}`;
+      console.log("ULink sent : ", resetLink)
   
       // Send the password reset email
       sendEmail(email, 'Password Reset', `Click the following link to reset your password: ${resetLink}`);
@@ -56,7 +59,7 @@ router.post('/api/user/resetPassword', async (req, res) => {
   });
 
 
-  router.post('/resetPassword/:token', async (req, res) => {
+  router.post('/api/user/resetPassword/:token', async (req, res) => {
     const { token } = req.params;
     const { password } = req.body;
   
@@ -68,10 +71,11 @@ router.post('/api/user/resetPassword', async (req, res) => {
   
       if (!user) {
         return res.status(400).json({ message: 'Password reset token is invalid or has expired' });
-      }
+      };
+      console.log("USER:", user)
   
       // Update the user's password
-      user.password = hashPassword(password); 
+      user.password = await hashPassword(password); 
       user.resetPassword = { token: undefined, expires: undefined };
   
       await user.save();
