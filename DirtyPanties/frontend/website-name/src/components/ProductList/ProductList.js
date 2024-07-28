@@ -7,7 +7,7 @@ const ProductList = ({ products }) => {
   const navigate = useNavigate();
 
   const handleProductClick = (product) => {
-    navigate(`/viewproduct/${product._id}`, { state: { product } });
+    navigate(`/viewproduct/${product._id}`);
   };
 
   return (

@@ -13,6 +13,7 @@ import bodyParser from "body-parser";
 import path from 'path';
 import { fileURLToPath } from "url";
 import { initializeScheduledTasks } from './utils/auctionfunctions.mjs';
+import './websocket/websocketServer.mjs'
 
 const SESSION_SECRET = process.env.SESSION_SECRET
 const MONGO_URI = process.env.MONGO_URI;

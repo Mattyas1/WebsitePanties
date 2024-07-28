@@ -3,7 +3,7 @@ import {NewUserValidationSchema } from "../utils/ValidationSchemas.mjs";
 import "../strategies/local-strategy.mjs";
 import { matchedData, validationResult} from "express-validator";
 import User from "../mongoose/schemas/User.mjs"
-import { hashPassword } from "../utils/helpers.mjs";
+import { hashPassword } from "../utils/hashFunctions.mjs";
 
 const router = Router();
 

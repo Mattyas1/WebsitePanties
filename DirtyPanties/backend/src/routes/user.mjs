@@ -2,7 +2,7 @@ import {Router} from "express";
 import "../strategies/local-strategy.mjs";
 import User from "../mongoose/schemas/User.mjs"
 import { sendEmail } from "../utils/mailsFunction.mjs";
-import { hashPassword } from "../utils/helpers.mjs";
+import { hashPassword } from "../utils/hashFunctions.mjs";
 import { WEBSITE_URL } from "../config/constants.mjs";
 import crypto from 'crypto'
 

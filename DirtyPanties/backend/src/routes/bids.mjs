@@ -1,8 +1,7 @@
 import {Router} from "express";
 import Product from "../mongoose/schemas/Product.mjs";
 import User from "../mongoose/schemas/User.mjs";
-import { placeBid } from "../utils/bidsFunctions.mjs";
-
+import { sendHighestBidUpdate, getClientSubscription } from "../websocket/websocketServer.mjs";
 const router = Router();
 
 router.post('/api/bids/place', async (req,res) => {
@@ -15,6 +14,7 @@ router.post('/api/bids/place', async (req,res) => {
          if (!product) {
              return res.status(404).json({ error: 'Product not found' });
          }
+         
  
          // Find the user
          const user = await User.findById(userId);
@@ -40,6 +40,7 @@ router.post('/api/bids/place', async (req,res) => {
         user.coins = user.coins - userBid;
         const updatedProduct = await product.save();
         const updatedUser =await user.save();
+        await sendHighestBidUpdate(productId);
 
         res.status(200).json({ message: 'Bid placed successfully', updatedProduct, updatedUser });
     }catch(error) {

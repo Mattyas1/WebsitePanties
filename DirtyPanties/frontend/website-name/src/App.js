@@ -37,7 +37,7 @@ const App = () => {
             <Route path="/buycoins" element={<BuyCoins/>} />
             <Route path="/settings" element = {<Settings />} />
             <Route path="/marketplace" element={<Marketplace />} />
-            <Route path= "/viewproduct/:id" element={<ViewProduct/>} />
+            <Route path= "/viewproduct/:productId" element={<ViewProduct/>} />
             <Route path="/register" element = {<Register />} />
             <Route path="/success" element = {<Success />} />
             <Route path="/cancel" element = {<Cancel />} />

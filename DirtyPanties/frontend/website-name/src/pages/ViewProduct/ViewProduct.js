@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Modal from 'react-modal';
-import { API_BASE_URL } from '../../constants';
+import { API_BASE_URL, WSS_URL } from '../../constants';
 import './ViewProduct.css'; // Make sure to create this CSS file
 import { AuthContext } from '../../context/AuthContext';
 
 const ViewProduct = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const [product, setProduct] = useState(location.state?.product);
+  const {productId} = useParams();
+  const [product, setProduct] = useState(null);
   const { isAuthenticated, setUser, user } = useContext(AuthContext);
 
   const [timeRemaining, setTimeRemaining] = useState('');
@@ -20,25 +20,41 @@ const ViewProduct = () => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/api/products/${product._id}`);
-        setProduct(response.data);
-      } catch (error) {
-        console.error('Error fetching product:', error);
+    const socket = new WebSocket(`${WSS_URL}`);
+  
+    socket.onopen = () => {
+      socket.send(JSON.stringify({
+        type: 'subscribe',
+        data: productId  // Fixed the structure of the data being sent
+      }));
+    };
+  
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+  
+      if (message.type === 'productSet') {
+        console.log("Received : ", message.data)
+        setProduct(message.data);
+      };
+  
+      if (message.type === 'productUpdate') {
+        console.log("Received : ", message.data)
+        setProduct((prevProduct) => ({
+          ...prevProduct,
+          bid: {
+            ...prevProduct.bid,
+            amount: message.data.highestBid
+          }
+        }));
       }
     };
-
-    if (!product?._id) return;
-
-    fetchProduct(); // Initial call to get the product information
-
-    const intervalId = setInterval(() => {
-      fetchProduct();
-    }, 5000); // Refresh every 5 seconds (5000 ms)
-
-    return () => clearInterval(intervalId);
-  }, [product?._id]);
+  
+    // Cleanup function to close the WebSocket connection when the component is unmounted or productId changes
+    return () => {
+      socket.close();
+    };
+  }, [productId]);
+  
 
   // Calculate time remaining
   useEffect(() => {
@@ -91,7 +107,7 @@ const ViewProduct = () => {
     setIsConfirmModalOpen(false);
     try {     
       const body = {
-        productId: product._id,
+        productId: productId,
         userBid,
       };
       const headers = {'Content-Type': 'application/json'};
@@ -124,7 +140,7 @@ const ViewProduct = () => {
       </div>
       <div className="product-details">
         <h1 className="product-title">{product.name}</h1>
-        <p className="product-price">Current Highest Bid: {product.bid.amount} 🪙</p>
+        <p className="product-price">Current Highest Bid: {product.bid.amount} 🪙 </p>
         <p className="product-description">Description: {product.description}</p>
         <p className="product-category">Category: {product.category}</p>
         <p className="auction-timer">Time remaining: {timeRemaining}</p>
