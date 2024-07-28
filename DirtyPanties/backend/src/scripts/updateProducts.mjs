@@ -1,4 +1,4 @@
-import './config/env.mjs'
+import '../config/env.mjs'
 
 import mongoose from 'mongoose';
 import Product from '../mongoose/schemas/Product.mjs'; 
@@ -14,7 +14,7 @@ const updateProducts = async () => {
 
         // Update all existing products to include the new bid property with default values
         await Product.updateMany({}, {
-            $set: { bid: {date:new Date(), amount: 0, bidderId: '' } }
+            $set: { isSold: 'false' }
         });
 
         console.log('Products updated successfully.');

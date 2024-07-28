@@ -49,7 +49,7 @@ router.post('/api/user/resetPassword', async (req, res) => {
       console.log("ULink sent : ", resetLink)
   
       // Send the password reset email
-      sendEmail(email, 'Password Reset', `Click the following link to reset your password: ${resetLink}`);
+      await sendEmail(email, 'Password Reset', `Click the following link to reset your password: ${resetLink}`);
   
       res.status(200).json({ message: 'Password reset link sent' });
     } catch (error) {

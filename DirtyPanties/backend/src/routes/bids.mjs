@@ -31,11 +31,12 @@ router.post('/api/bids/place', async (req,res) => {
             return res.status(400).json({ error: 'Bid placed too low' });
         }
 
-         product.bid = {
+        const updatedBid = {
             amount: userBid,
-            bidderID: userId,
+            bidderId: userId,
             date : new Date()
          }
+         product.bid = updatedBid;
         user.coins = user.coins - userBid;
         const updatedProduct = await product.save();
         const updatedUser =await user.save();

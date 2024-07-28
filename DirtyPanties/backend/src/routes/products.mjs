@@ -4,6 +4,7 @@ import multer from "multer";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from 'url';
+import { scheduleAuctionEnd } from "../utils/auctionfunctions.mjs";
 
 const router = Router();
 
@@ -70,7 +71,7 @@ router.post('/api/products/new', (req, res) => {
     const productData = {
       name: req.body.name,
       category: req.body.category,
-      price: req.body.price,
+      startingPrice: req.body.price,
       description: req.body.description,
       auctionDate: req.body.auctionDate,
       apparitionLink: req.body.apparitionLink,
@@ -94,6 +95,8 @@ router.post('/api/products/new', (req, res) => {
     const imagePaths = files.map(file => path.join('uploads', product._id.toString(), file.filename));
     product.images = imagePaths;
     await product.save();
+
+    await scheduleAuctionEnd(product);
 
     // Send response
     res.status(201).json(product);

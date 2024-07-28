@@ -30,6 +30,11 @@ const ProductSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  isSold: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   apparitionLink: {
     type: String,
     validate: {
@@ -38,7 +43,7 @@ const ProductSchema = new mongoose.Schema({
       },
       message: 'Apparition link must be a valid URL',
     },
-    required: true,
+    required: false,
   },
   model: {
     type: String,

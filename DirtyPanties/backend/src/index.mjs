@@ -1,5 +1,4 @@
 import './config/env.mjs'
-
 import express from "express";
 import passport from 'passport';
 import mongoose from "mongoose";
@@ -13,6 +12,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import path from 'path';
 import { fileURLToPath } from "url";
+import { initializeScheduledTasks } from './utils/auctionfunctions.mjs';
 
 const SESSION_SECRET = process.env.SESSION_SECRET
 const MONGO_URI = process.env.MONGO_URI;
@@ -31,6 +31,8 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
   console.log('Connected to MongoDB');
 });
+
+initializeScheduledTasks();
 
 app.use(cors({
     origin: ['http://localhost:3000'],
