@@ -1,5 +1,40 @@
 import mongoose from "mongoose";
 
+const BidHistorySchema = new mongoose.Schema({
+    productId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product',
+      required: true
+    },
+    productName : {
+      type: String,
+      required: true
+    },
+    bidAmount: {
+      type: Number,
+      required: true
+    },
+    bidDate: {
+      type: Date,
+      default: Date.now
+    }
+  });
+
+  const NotificationSchema = new mongoose.Schema({
+    message: {
+      type: String,
+      required: true,
+    },
+    read: {
+      type: Boolean,
+      default: false,
+    },
+    date: {
+      type: Date,
+      default: Date.now,
+    },
+  });
+
 const UserSchema = new mongoose.Schema({
     
     birthDate: {
@@ -35,7 +70,8 @@ const UserSchema = new mongoose.Schema({
         enum: ['user', 'admin', 'partner'], 
         default: 'user' 
     },
-
+    bidHistory: [BidHistorySchema],
+    notifications: [NotificationSchema],
 });
 
 const User = mongoose.model('User', UserSchema);

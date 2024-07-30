@@ -25,7 +25,7 @@ const ViewProduct = () => {
     socket.onopen = () => {
       socket.send(JSON.stringify({
         type: 'subscribe',
-        data: productId  // Fixed the structure of the data being sent
+        data: {productId : productId}  
       }));
     };
   
@@ -53,7 +53,7 @@ const ViewProduct = () => {
     return () => {
       socket.close();
     };
-  }, [productId]);
+  }, [productId, user]);
   
 
   // Calculate time remaining

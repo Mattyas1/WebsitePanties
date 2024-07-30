@@ -1,21 +1,42 @@
-import React from 'react';
-import './Home.css'; // Import the CSS file
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import ProductList from '../../components/ProductList/ProductList';
+import "./Home.css";
+import axios from 'axios';
+import { API_BASE_URL } from '../../constants';
 
 const Home = () => {
-  const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const handlePostButton = () => {
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/api/products`);
+        const data = response.data;
+        setProducts(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    navigate("/postproduct")
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
-    <div className="home-container">
-      <h1>Welcome to My Marketplace</h1>
-      <p>Your one-stop shop for all things awesome!</p>
-      <button onClick={handlePostButton}>
-        Post New Product
-      </button>
+    <div className='marketplace-container'>
+      <h1>HOME</h1>
+      <ProductList products={products} />
     </div>
   );
 };

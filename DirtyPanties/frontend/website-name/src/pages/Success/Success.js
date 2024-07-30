@@ -15,9 +15,6 @@ const Success = () => {
       <button className="success-button" onClick={() => navigate('/')}>
         Go to Homepage
       </button>
-      <button className="success-button" onClick={() => navigate('/marketplace')}>
-        Go to Marketplace
-      </button>
     </div>
   );
 };

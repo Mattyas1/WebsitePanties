@@ -8,6 +8,7 @@ const wss = new WebSocketServer({port : PORT});
 
 //Pour enregistrer les connexions pour chaques produits
 const clientSubscriptions = {};
+const userConnections = {};
 
 //on connection of a new product: 
 const sendHighestBidUpdate = async (productId) => {
@@ -43,25 +44,27 @@ wss.on ('connection', async (ws) => {
         const msg = JSON.parse(message);
 
         if (msg.type === 'subscribe') {
-            const productId = msg.data;
-            if(!clientSubscriptions[productId]) {
-                clientSubscriptions[productId] = new Set();
-            }
-            clientSubscriptions[productId].add(ws);
+            const {productId} = msg.data;
+            if(productId){
+                if(!clientSubscriptions[productId]) {
+                    clientSubscriptions[productId] = new Set();
+                }
+                clientSubscriptions[productId].add(ws);
 
-            const product = await Product.findById(productId);
-            if (product) {
-                ws.send(JSON.stringify({
-                    type: 'productSet',
-                    data: {
-                        name: product.name,
-                        description: product.description,
-                        category: product.category,
-                        auctionDate: product.auctionDate,
-                        bid: product.bid,
-                        images: product.images
-                    }
-                }));
+                const product = await Product.findById(productId);
+                if (product) {
+                    ws.send(JSON.stringify({
+                        type: 'productSet',
+                        data: {
+                            name: product.name,
+                            description: product.description,
+                            category: product.category,
+                            auctionDate: product.auctionDate,
+                            bid: product.bid,
+                            images: product.images
+                        }
+                    }));
+                };
             };
         };
     });

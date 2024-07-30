@@ -30,6 +30,14 @@ const Header = () => {
     navigate("/buycoins");
   };
 
+  const handleSettings = () => {
+    navigate("/settings")
+  };
+
+  const handleHistory = () => {
+    navigate("/history")
+  }
+
   const handleLogout = () => {
     Cookies.remove("accessToken");
     Cookies.remove("refreshToken");
@@ -45,14 +53,15 @@ const Header = () => {
       <img src={logo} alt="Logo" />
       <nav>
         <Link to="/">Home</Link>
-        <Link to="/marketplace">Marketplace</Link>
         {isAuthenticated ? (
           <div className="dropdown">
             <button onClick={toggleDropdown}>My Account</button>
             {showDropdown && (
               <div className="dropdown-content">
-                <Link to="/settings">Settings</Link>
+                <button onClick={handleSettings}>Settings</button>
                 <button onClick={handleBuyCoins}>Buy Coins</button>
+                <button onClick={handleHistory}>History</button>
+
                 <button onClick={handleLogout}>Logout</button>
               </div>
             )}

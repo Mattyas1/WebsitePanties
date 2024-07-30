@@ -1,5 +1,11 @@
 import mongoose from 'mongoose';
 
+
+const BidSchema = new mongoose.Schema({
+  amount: { type: Number, default: 0 },
+  bidderId: { type: String, default: '' },
+  date: { type: Date, default: Date.now },
+});
 // Main Product Schema
 const ProductSchema = new mongoose.Schema({
   name: {
@@ -49,11 +55,10 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  bid: {
-    amount: { type: Number, default: 0 },
-    bidderId: { type: String, default: '' },
-    date: { type: Date, default: Date.now },
-  },
+  bid: BidSchema,
+  
+  bidHistory : [BidSchema],
+
   // Category-specific fields
   warranty: {
     type: String,
