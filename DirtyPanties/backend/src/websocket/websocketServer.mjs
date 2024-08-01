@@ -6,9 +6,34 @@ const PORT = process.env.WS_PORT || 8080;
 
 const wss = new WebSocketServer({port : PORT});
 
+const userConnections = {};
 //Pour enregistrer les connexions pour chaques produits
 const clientSubscriptions = {};
-const userConnections = {};
+
+const sendNotificationUpdate = async (userId, message) => {
+    const user = await User.findById(userId);
+
+    if(user){
+        const notification = {
+            message,
+            read : false,
+            date: new Date(),
+        };
+        user.notifications.push(notification);
+        await user.save();
+        const updateMessage = JSON.stringify({
+            type:'notificationUpdate',
+            data: notification
+        });
+        if (userConnections[userId]){
+            const client = userConnections[userId];
+            if (client.readyState===WebSocket.OPEN) {
+                client.send(updateMessage);
+            }
+        };
+    }
+
+}
 
 //on connection of a new product: 
 const sendHighestBidUpdate = async (productId) => {
@@ -43,6 +68,19 @@ wss.on ('connection', async (ws) => {
     ws.on('message', async (message) => {
         const msg = JSON.parse(message);
 
+        //on Connection store user's ws in userConnections 
+        if(msg.type === 'registerUser'){
+            const {userId} = msg.data;
+            if (userId){
+                userConnections[userId] = ws;
+                ws.send(JSON.stringify({
+                    type: 'welcome',
+                    data: {message: 'You are connected to the wss'}
+                }));
+            }
+        }
+
+        //when subscribing to a product, store user's ws in clientSubscriptions[productId]
         if (msg.type === 'subscribe') {
             const {productId} = msg.data;
             if(productId){
@@ -67,10 +105,31 @@ wss.on ('connection', async (ws) => {
                 };
             };
         };
+
+        if (msg.type === 'notificationsRead') {
+            const {userId} = msg.data;
+            if(userId){
+                const user = await User.findById(userId);
+                if (user){
+                    const updateNotifications = user.notifications.map(notification => 
+                    notification.read ? notification : {...notification, read:true});
+                    user.notifications = updateNotifications;
+                    await user.save();
+                }
+            }
+        }
     });
 
     ws.on('close', () => {
     console.log('Client disconnected');
+    for (const userId in userConnections){
+        if (userConnections[userId] === ws){
+            delete userConnections[userId];
+            break;
+        }
+    } 
+
+
     for (const productId in clientSubscriptions) {
       clientSubscriptions[productId].delete(ws);
       if (clientSubscriptions[productId].size === 0) {
@@ -86,4 +145,4 @@ wss.on ('connection', async (ws) => {
 
 console.log(`WebSocket server is running on ws://localhost:${PORT}`);
 
-export {wss, getClientSubscription, sendHighestBidUpdate};
+export {wss, getClientSubscription, sendHighestBidUpdate, sendNotificationUpdate};

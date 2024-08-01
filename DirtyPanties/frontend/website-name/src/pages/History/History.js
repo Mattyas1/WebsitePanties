@@ -37,13 +37,13 @@ const History = () => {
                         {[...user.bidHistory].reverse().map((bid, index) => (
                             <li key={index} className="bid-history-item">
                                 <p><strong>Produit:</strong> {bid.productName}</p>
-                                <p><strong>Montant de l'enchère:</strong> ${bid.bidAmount}</p>
-                                <p><strong>Date de l'enchère:</strong> {new Date(bid.bidDate).toLocaleString()}</p>
+                                <p><strong>Montant de l'offre:</strong> ${bid.bidAmount}</p>
+                                <p><strong>Date de l'offre:</strong> {new Date(bid.bidDate).toLocaleString()}</p>
                             </li>
                         ))}
                     </ul>
                 ) : (
-                    <p>Aucune enchère trouvée.</p>
+                    <p>Aucune offre trouvée.</p>
                 )}
             </div>
         </div>

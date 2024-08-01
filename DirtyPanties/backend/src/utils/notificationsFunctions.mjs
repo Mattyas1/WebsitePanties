@@ -1,5 +1,6 @@
 import User from "../mongoose/schemas/User.mjs"
 import { sendEmail } from "./mailsFunction.mjs";
+import {sendNotificationUpdate} from '../websocket/websocketServer.mjs'
 
 
 export const sendWinningNotification = async (product) => {
@@ -11,6 +12,8 @@ export const sendWinningNotification = async (product) => {
         console.log("The winner of the product ", product._id, " was not found");
         return null
     };
+    const message = `You just won the following Auction: ${product.name}.  Check your email for more information`
+    await sendNotificationUpdate(winner.id, message);
 
     const winnerMailSubject = `Congratulation on winning ${product.name}`;
     const winnerMailText = `The auction just terminated and you are officially the winner of the following product: ${product.name}

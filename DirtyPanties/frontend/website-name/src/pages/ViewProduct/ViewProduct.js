@@ -2,15 +2,17 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Modal from 'react-modal';
-import { API_BASE_URL, WSS_URL } from '../../constants';
+import { API_BASE_URL } from '../../constants';
 import './ViewProduct.css'; // Make sure to create this CSS file
 import { AuthContext } from '../../context/AuthContext';
+import { useWebSocket } from '../../context/WebSocketContext';
 
 const ViewProduct = () => {
   const navigate = useNavigate();
   const {productId} = useParams();
   const [product, setProduct] = useState(null);
   const { isAuthenticated, setUser, user } = useContext(AuthContext);
+  const {socket, ready, registerMessageHandler, unregisterMessageHandler} = useWebSocket();
 
   const [timeRemaining, setTimeRemaining] = useState('');
   const [userBid, setUserBid] = useState('');
@@ -19,41 +21,40 @@ const ViewProduct = () => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
-  useEffect(() => {
-    const socket = new WebSocket(`${WSS_URL}`);
-  
-    socket.onopen = () => {
-      socket.send(JSON.stringify({
-        type: 'subscribe',
-        data: {productId : productId}  
-      }));
-    };
-  
-    socket.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-  
-      if (message.type === 'productSet') {
-        console.log("Received : ", message.data)
-        setProduct(message.data);
+  useEffect(() => {  
+    if(ready && socket) {
+
+      const handleProductSet = (data) => {
+        console.log("Received productSet:", data);
+        setProduct(data);
       };
-  
-      if (message.type === 'productUpdate') {
-        console.log("Received : ", message.data)
+
+      const handleProductUpdate = (data) => {
+        console.log("Received productUpdate:", data);
         setProduct((prevProduct) => ({
           ...prevProduct,
           bid: {
             ...prevProduct.bid,
-            amount: message.data.highestBid
+            amount: data.highestBid
           }
         }));
-      }
-    };
+      };
+
+      registerMessageHandler('productSet', handleProductSet);
+      registerMessageHandler('productUpdate', handleProductUpdate);
+
+      socket.send(JSON.stringify({
+        type: 'subscribe',
+        data: {productId}  
+      }));
+
   
-    // Cleanup function to close the WebSocket connection when the component is unmounted or productId changes
     return () => {
-      socket.close();
+      unregisterMessageHandler('productSet');
+      unregisterMessageHandler('productUpdate');
     };
-  }, [productId, user]);
+   }
+  }, [productId, socket, registerMessageHandler, unregisterMessageHandler, ready]);
   
 
   // Calculate time remaining
@@ -92,6 +93,10 @@ const ViewProduct = () => {
   };
 
   const handleBidSubmit = () => {
+    if (timeRemaining === 'Auction ended') {
+      setBiddingError('This auction is already finished');
+      return
+    }
     if (userBid > user.coins) {
       setBiddingError('Not enough coins');
       return;
@@ -116,7 +121,7 @@ const ViewProduct = () => {
 
       if (response.status !== 200) {
         throw new Error(`Server responded with status code ${response.status}`);
-      }
+      };
 
       const data = response.data;
       setProduct(data.updatedProduct);
@@ -129,7 +134,7 @@ const ViewProduct = () => {
   };
 
   if (!product) {
-    return <div>No product data found.</div>;
+    return <div>Loading Product Data</div>;
   }
 
   return (

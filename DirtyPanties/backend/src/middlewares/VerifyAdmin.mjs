@@ -1,10 +1,9 @@
-import jwt from 'jsonwebtoken';
 import User from '../mongoose/schemas/User.mjs';
 
 const verifyAdmin = async (req, res, next) => {
     try {
         const {userId} = req.session
-        const user = await User.findById(decoded.userId);
+        const user = await User.findById(userId);
         
         if (user && user.role === 'admin') {
             next(); // User is admin, proceed with request

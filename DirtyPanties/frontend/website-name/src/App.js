@@ -16,37 +16,41 @@ import BuyCoins from './pages/BuyCoins/BuyCoins';
 import Success from './pages/Success/Success';
 import Cancel from './pages/Cancel/Cancel';
 import History from './pages/History/History'
-import {AuthProvider } from './context/AuthContext';
+import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
+import { AuthProvider } from './context/AuthContext';
 import axios from 'axios';
-
+import AdminRoute from './components/AdminRoute';
+import {WebSocketProvider} from './context/WebSocketContext';
 
 const App = () => {
   axios.defaults.withCredentials = true;
 
-
   return (
     <AuthProvider>
-      <Router>
-        <Header />
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/resetpassword" element={<ResetPassword />} />
-            <Route path="/newpassword/:token" element={<NewPassword />} />
-            <Route path="/buycoins" element={<BuyCoins/>} />
-            <Route path="/settings" element = {<Settings />} />
-            <Route path= "/viewproduct/:productId" element={<ViewProduct/>} />
-            <Route path="/register" element = {<Register />} />
-            <Route path="/success" element = {<Success />} />
-            <Route path="/cancel" element = {<Cancel />} />
-            <Route path="/history" element = {<History />} />
-            <Route path="/postproduct" element = {<PostProductForm />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-        <Footer />
-      </Router>
+      <WebSocketProvider>
+        <Router>
+          <Header />
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/resetpassword" element={<ResetPassword />} />
+              <Route path="/newpassword/:token" element={<NewPassword />} />
+              <Route path="/buycoins" element={<BuyCoins/>} />
+              <Route path="/settings" element = {<Settings />} />
+              <Route path= "/viewproduct/:productId" element={<ViewProduct/>} />
+              <Route path="/register" element = {<Register />} />
+              <Route path='/admindashboard' element = {<AdminRoute><AdminDashboard/></AdminRoute>} />
+              <Route path="/success" element = {<Success />} />
+              <Route path="/cancel" element = {<Cancel />} />
+              <Route path="/history" element = {<History />} />
+              <Route path="/postproduct" element = {<PostProductForm />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
+          <Footer />
+        </Router>
+      </WebSocketProvider>
     </AuthProvider>
   );
 };

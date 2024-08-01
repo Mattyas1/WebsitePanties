@@ -1,7 +1,7 @@
 import {Router} from "express";
 import Product from "../mongoose/schemas/Product.mjs";
 import User from "../mongoose/schemas/User.mjs";
-import { sendHighestBidUpdate, getClientSubscription } from "../websocket/websocketServer.mjs";
+import { sendHighestBidUpdate } from "../websocket/websocketServer.mjs";
 const router = Router();
 
 router.post('/api/bids/place', async (req,res) => {
@@ -13,16 +13,21 @@ router.post('/api/bids/place', async (req,res) => {
          const product = await Product.findById(productId);
          if (!product) {
              return res.status(404).json({ error: 'Product not found' });
-         }
+         };
          const bid = product.bid;
+         const endDate = product.auctionDate;
+         if (new Date()> endDate) {
+            console.log("Bid tried on an ended auction0");
+            return res.status(404).json({ error: 'Auction is already finished' });
+         }
          const previousBidder = await User.findById(bid.bidderId);
          if (!previousBidder) {
-            console.log("Previous Nidder not found")
+            console.log("Previous Bidder not found")
              return res.status(404).json({ error: 'Previous Bidder not found' });
          }
  
          // Find the user
-         const user = await User.findById(userId);
+         let user = await User.findById(userId);
          if (!user) {
              return res.status(404).json({ error: 'User not found' });
          }
@@ -39,6 +44,9 @@ router.post('/api/bids/place', async (req,res) => {
         previousBidder.coins = previousBidder.coins + product.bid.amount;
         //send him a notification here
         await previousBidder.save();
+        if (toString(user._id) === toString(previousBidder._id)){
+            user = await User.findById(userId);
+        }
         const bidDate = new Date();
 
         const updatedBid = {
@@ -59,9 +67,9 @@ router.post('/api/bids/place', async (req,res) => {
             bidDate: bidDate
         }
         user.bidHistory.push(bidHistory);
-        const updatedUser =await user.save();
-
+        await user.save();
         await sendHighestBidUpdate(productId);
+        const updatedUser = await User.findById(userId);
 
         res.status(200).json({ message: 'Bid placed successfully', updatedProduct, updatedUser });
     }catch(error) {
