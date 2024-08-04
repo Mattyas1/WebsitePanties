@@ -8,7 +8,7 @@ export const WebSocketProvider = ({ children }) => {
   const { user } = useContext(AuthContext);
   const [socket, setSocket] = useState(null);
   const [ready, setReady] = useState(false);
-  const userId = user._id;
+  const userId = user?.id;
 
   // Ref to store message handlers to avoid re-creating handlers
   const messageHandlers = useRef({});

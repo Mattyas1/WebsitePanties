@@ -1,13 +1,12 @@
-// src/pages/PostProduct.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../../constants';
-import './PostProduct.css'; // Pour les styles
+import './PostProduct.css'; // For styles
 
 const PostProduct = () => {
   const [product, setProduct] = useState({
     name: '',
-    category: 'Clothing', // Valeur par défaut
+    category: 'Clothing', // Default value
     price: '',
     description: '',
     auctionDate: '',
@@ -17,7 +16,25 @@ const PostProduct = () => {
     size: '',
     material: '',
   });
-  const [images,setImages] = useState([]);
+  const [images, setImages] = useState([]);
+  const [partners, setPartners] = useState([]);
+  const [loadingPartners, setLoadingPartners] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPartners = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/api/partner`);
+        setPartners(response.data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoadingPartners(false);
+      }
+    };
+
+    fetchPartners();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,19 +48,29 @@ const PostProduct = () => {
     setImages(Array.from(e.target.files));
   };
 
+  const handlePartnerChange = (e) => {
+    const selectedPartner = partners.find(partner => partner.username === e.target.value);
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      model: selectedPartner ? { userId: selectedPartner._id, username: selectedPartner.username } : ''
+    }));
+  };
+
   const handleSubmit = async (e) => {
-    console.log(images);
     e.preventDefault();
+    console.log(product)
     const formData = new FormData();
     for (let key in product) {
-      formData.append(key, product[key]);
+      if (key === 'model') {
+        formData.append(key, JSON.stringify(product[key]));
+      } else {
+        formData.append(key, product[key]);
+      }
     }
     images.forEach(image => {
       formData.append('images', image);
     });
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    };
+
     try {
       await axios.post(`${API_BASE_URL}/api/products/new`, formData, {
         headers: {
@@ -81,7 +108,7 @@ const PostProduct = () => {
           >
             <option value="Clothing">Clothing</option>
             <option value="Toy">Toy</option>
-            {/* Ajouter d'autres catégories si nécessaire */}
+            {/* Add other categories as needed */}
           </select>
         </label>
         <label>
@@ -134,16 +161,24 @@ const PostProduct = () => {
           />
         </label>
         <label>
-          Model:
-          <input
-            type="text"
-            name="model"
-            value={product.model}
-            onChange={handleChange}
-          />
+          Partner:
+          {loadingPartners ? (
+            <p>Loading partners...</p>
+          ) : error ? (
+            <p>Error loading partners: {error}</p>
+          ) : (
+            <select name="model" onChange={handlePartnerChange} required>
+              <option value="">Select a partner</option>
+              {partners.map(partner => (
+                <option key={partner._id} value={partner.username}>
+                  {partner.username}
+                </option>
+              ))}
+            </select>
+          )}
         </label>
 
-        {/* Affichage conditionnel des champs spécifiques */}
+        {/* Conditionally render fields based on the selected category */}
         {product.category === 'Toy' && (
           <>
             <label>

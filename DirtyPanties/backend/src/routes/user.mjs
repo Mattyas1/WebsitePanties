@@ -1,6 +1,7 @@
 import {Router} from "express";
 import "../strategies/local-strategy.mjs";
 import User from "../mongoose/schemas/User.mjs"
+import Product from "../mongoose/schemas/Product.mjs";
 import { sendEmail } from "../utils/mailsFunction.mjs";
 import { hashPassword } from "../utils/hashFunctions.mjs";
 import { WEBSITE_URL } from "../config/constants.mjs";
@@ -9,7 +10,6 @@ import crypto from 'crypto'
 const router = Router();
 
 router.post("/api/user/getUsername", async (req,res) => {
-    console.log("SESSION USER :", req.session)
     try {
         const findUser = await User.findById(req.body.id);
 
@@ -88,7 +88,13 @@ router.post('/api/user/resetPassword', async (req, res) => {
   });
 
   router.get('/api/user/:userId', async (req,res) => {
+
     const {userId} = req.params;
+
+    if (!req.session.userId || req.session.userId !== userId) {
+      return res.status(403).json({ message: 'Access denied' });
+    };
+
     try {
       const user = await  User.findById(userId)
       if (!user) {
@@ -100,5 +106,69 @@ router.post('/api/user/resetPassword', async (req, res) => {
       console.error('Error fetching user:', error);
     res.status(500).json({ message: 'Server error' });
     }
-  })
+  });
+
+  router.post('/api/user/favorite/:userId', async (req,res) => {
+    const {productId} = req.body;
+    const {userId} = req.params;
+
+    if (!req.session.userId || req.session.userId !== userId) {
+      return res.status(403).json({ message: 'Access denied' });
+    };
+
+    try {
+      const user = await  User.findById(userId)
+      if (!user) {
+        return res.status(400).json({ message: 'User not found to add for favorite' });
+      };
+      const product = await  Product.findById(productId)
+      if (!product) {
+        return res.status(400).json({ message: 'Product not found to add for favorite' });
+      };
+      const productIndex = user.favoriteProducts.findIndex(
+        (fav) => fav.productId.toString() === productId
+      );
+      if (productIndex > -1) {
+        // Remove from favorites
+        user.favoriteProducts.splice(productIndex, 1);
+      } else {
+        // Add to favorites
+        user.favoriteProducts.push({ productId, productName: `${product.name}` });
+      };
+      await user.save();
+
+    // Respond with only the updated favoriteProducts array
+    res.json({ favoriteProducts: user.favoriteProducts });
+    } catch (error) {
+      res.status(500).json({ message: 'Server error', error });
+    }
+  });
+
+  router.get('/api/users/:userId/favorites', async (req, res) => {
+    try {
+      console.log(req.session)
+      const userId = req.params.userId;
+      if (!req.session.userId || req.session.userId !== userId) {
+        return res.status(403).json({ message: 'Access denied' });
+      };
+
+      const user = await User.findById(userId).select('favoriteProducts').populate('favoriteProducts.productId');
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Extract product IDs from favoriteProducts
+      const favoriteProductIds = user.favoriteProducts.map(fav => fav.productId._id);
+  
+      const products = await Product.find({ _id: { $in: favoriteProductIds } });
+  
+      // Respond with the list of products
+      res.json(products);
+    } catch (error) {
+      console.error('Error fetching favorite products:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
 export default router;

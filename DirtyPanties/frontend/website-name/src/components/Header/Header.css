@@ -40,7 +40,20 @@ nav a.home-link {
 }
 
 nav a.home-link:hover {
-  color: #61dafb; /* Hover color */
+  color: #61dafb; 
+}
+
+nav a.login-link {
+  position: relative;
+  bottom: 2px;
+  right:20px;
+  font-size: 20px; 
+  font-family: 'Arial', sans-serif; 
+  transition: color 0.3s; 
+}
+
+nav a.login-link:hover {
+  color: #61dafb; 
 }
 
 .notification-icon {

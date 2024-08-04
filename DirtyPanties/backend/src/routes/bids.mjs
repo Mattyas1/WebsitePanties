@@ -7,6 +7,9 @@ const router = Router();
 router.post('/api/bids/place', async (req,res) => {
     const {productId, userBid} = req.body;
     const {userId} = req.session;
+    if (!userId) {
+        return res.status(401).json({ error: 'User is not authenticated' });
+    }
 
     try{
          // Find the product by ID
@@ -19,12 +22,15 @@ router.post('/api/bids/place', async (req,res) => {
          if (new Date()> endDate) {
             console.log("Bid tried on an ended auction0");
             return res.status(404).json({ error: 'Auction is already finished' });
+         };
+         if(bid){
+            const previousBidder = await User.findById(bid.bidderId);
+            if (!previousBidder) {
+                console.log("Previous Bidder not found")
+                return res.status(404).json({ error: 'Previous Bidder not found' });
+            }
          }
-         const previousBidder = await User.findById(bid.bidderId);
-         if (!previousBidder) {
-            console.log("Previous Bidder not found")
-             return res.status(404).json({ error: 'Previous Bidder not found' });
-         }
+         
  
          // Find the user
          let user = await User.findById(userId);
@@ -37,15 +43,17 @@ router.post('/api/bids/place', async (req,res) => {
              return res.status(400).json({ error: 'Insufficient coins' });
          };
 
-         if (userBid < bid.amount) {
+         if (userBid < (bid? bid.amount : product.startingPrice)) {
             return res.status(400).json({ error: 'Bid placed too low' });
         }
 
-        previousBidder.coins = previousBidder.coins + product.bid.amount;
-        //send him a notification here
-        await previousBidder.save();
-        if (toString(user._id) === toString(previousBidder._id)){
-            user = await User.findById(userId);
+        if (bid) {
+            previousBidder.coins = previousBidder.coins + product.bid.amount;
+            //send him a notification here
+            await previousBidder.save();
+            if (toString(user._id) === toString(previousBidder._id)){
+                user = await User.findById(userId);
+            }
         }
         const bidDate = new Date();
 

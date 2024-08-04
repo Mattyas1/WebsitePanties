@@ -10,6 +10,12 @@ const ProductList = ({ products }) => {
     navigate(`/viewproduct/${product._id}`);
   };
 
+  const isAuctionEnded = (auctionDate) => {
+    const now = new Date();
+    const auctionEndDate = new Date(auctionDate);
+    return now > auctionEndDate;
+  };
+
   return (
     <div className='product-list'>
       {products.map(product => (
@@ -20,7 +26,11 @@ const ProductList = ({ products }) => {
         >
           <img src={`${API_BASE_URL}/${product.images[0]}`} alt={product.name} />
           <h2>{product.name}</h2>
-          <p>Current bid : {product.bid.amount}  coins</p>
+          {isAuctionEnded(product.auctionDate) ? (
+            <p>Auction Ended</p>
+          ) : (
+            <p>Current bid: {product.bid ? `${product.bid.amount} coins` : `${product.startingPrice} coins`}</p>
+          )}
         </div>
       ))}
     </div>

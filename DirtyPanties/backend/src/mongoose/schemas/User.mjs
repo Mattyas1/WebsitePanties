@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 const BidHistorySchema = new mongoose.Schema({
     productId: {
@@ -72,6 +72,32 @@ const UserSchema = new mongoose.Schema({
     },
     bidHistory: [BidHistorySchema],
     notifications: [NotificationSchema],
+    favoriteProducts: [
+      {
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Product',
+          required: true,
+        },
+        productName : {
+          type: String,
+          required: true
+        },
+      }
+    ],
+    subscribedPartners:  [
+      {
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+          required: true
+        },
+        userName : {
+          type: String,
+          required: true
+        },
+      }
+    ]
 });
 
 const User = mongoose.model('User', UserSchema);

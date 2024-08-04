@@ -99,7 +99,8 @@ wss.on ('connection', async (ws) => {
                             category: product.category,
                             auctionDate: product.auctionDate,
                             bid: product.bid,
-                            images: product.images
+                            images: product.images,
+                            startingPrice: product.startingPrice,
                         }
                     }));
                 };

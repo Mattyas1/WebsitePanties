@@ -28,6 +28,17 @@
   margin-bottom: 10px;
 }
 
+.favorite-icon {
+  color: gray; 
+  margin-left: 10px; 
+  cursor: pointer; 
+  transition: color 0.3s; 
+}
+
+.favorite-icon:hover {
+  color: red; 
+}
+
 .product-price, .product-description, .product-category, .auction-timer {
   margin-bottom: 10px;
   font-size: 1.2em;

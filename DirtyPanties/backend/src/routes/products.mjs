@@ -75,11 +75,13 @@ router.post('/api/products/new', (req, res) => {
       description: req.body.description,
       auctionDate: req.body.auctionDate,
       apparitionLink: req.body.apparitionLink,
-      model: req.body.model,
+      model: JSON.parse(req.body.model),
       warranty: req.body.warranty,
       size: req.body.size,
       material: req.body.material,
     };
+    
+    console.log("Model here ",productData.model);
 
     // Create and save the product instance
     Object.assign(product, productData); // Copy product data to the product instance

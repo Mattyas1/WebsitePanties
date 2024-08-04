@@ -3,7 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { API_BASE_URL } from '../../constants';
-import './ViewProduct.css'; // Make sure to create this CSS file
+import './ViewProduct.css'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { AuthContext } from '../../context/AuthContext';
 import { useWebSocket } from '../../context/WebSocketContext';
 
@@ -17,6 +19,8 @@ const ViewProduct = () => {
   const [timeRemaining, setTimeRemaining] = useState('');
   const [userBid, setUserBid] = useState('');
   const [biddingError, setBiddingError] = useState(null);
+  const [favoriteError, setFavoriteError] = useState(null);
+
 
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
@@ -87,6 +91,26 @@ const ViewProduct = () => {
     return () => clearInterval(timerInterval);
   }, [product]);
 
+  const handleFavoriteClick = async () => {
+    try {
+      if (isAuthenticated) {
+        const response = await axios.post(`${API_BASE_URL}/api/user/favorite/${user._id}`, { productId });
+        const updatedFavoriteProducts = response.data.favoriteProducts;
+        setUser((prevUser) => ({
+          ...prevUser,
+          favoriteProducts: updatedFavoriteProducts
+        }));
+        setFavoriteError(null); // Clear any previous errors
+        console.log("favorite product set/unset")
+      } else {
+        setFavoriteError('You need to be logged in to add favorites.');
+      }
+    } catch (error) {
+      console.error('Error adding to favorites:', error);
+      setFavoriteError('Error adding to favorites. Please try again.');
+    }
+  };
+
   const handleBidChange = (e) => {
     const value = e?.target?.value || ''; 
     setUserBid(value);
@@ -101,7 +125,9 @@ const ViewProduct = () => {
       setBiddingError('Not enough coins');
       return;
     }
-    if (userBid <= product.bid.amount) {
+    if (userBid <= (product.bid ? product.bid.amount : product.startingPrice) ) {
+      console.log(product.bid ? product.bid.amount : product.startingPrice)
+      console.log(userBid)
       setBiddingError('Bid must be higher than the current highest bid');
       return;
     }
@@ -133,6 +159,9 @@ const ViewProduct = () => {
     }
   };
 
+  const isFavorite = user?.favoriteProducts?.some((fav) => fav.productId === productId);
+  const heartColor = isFavorite ? 'red' : 'grey';
+
   if (!product) {
     return <div>Loading Product Data</div>;
   }
@@ -144,8 +173,17 @@ const ViewProduct = () => {
         <img src={`${API_BASE_URL}/${product.images[0]}`} alt={product.name} />
       </div>
       <div className="product-details">
-        <h1 className="product-title">{product.name}</h1>
-        <p className="product-price">Current Highest Bid: {product.bid.amount} 🪙 </p>
+        <h1 className="product-title">
+          {product.name}
+          <FontAwesomeIcon 
+          icon={faHeart} 
+          className="favorite-icon" 
+          onClick={handleFavoriteClick} 
+          style={{ color: heartColor }}
+          />
+        </h1>
+        {favoriteError && <p className="error-message">{favoriteError}</p>}
+        <p className="product-price">Current Highest Bid: {product.bid ? `${product.bid.amount}` : `${product.startingPrice}`} 🪙 </p>
         <p className="product-description">Description: {product.description}</p>
         <p className="product-category">Category: {product.category}</p>
         <p className="auction-timer">Time remaining: {timeRemaining}</p>

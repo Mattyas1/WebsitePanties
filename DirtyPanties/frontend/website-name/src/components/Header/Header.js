@@ -23,10 +23,20 @@ const Header = () => {
   const [unreadCount, setUnreadCount] = useState(unreadNotifications.current);
 
   const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target) &&
-        notificationsRef.current && !notificationsRef.current.contains(event.target) &&
-        bellIconRef.current && !bellIconRef.current.contains(event.target)) {
+    // Check if the click is outside both the dropdown and notifications
+    const isClickOutsideDropdown = dropdownRef.current && !dropdownRef.current.contains(event.target);
+    const isClickOutsideNotifications = notificationsRef.current && !notificationsRef.current.contains(event.target);
+    const isClickOutsideBellIcon = bellIconRef.current && !bellIconRef.current.contains(event.target);
+
+    // If clicking outside of dropdown or notifications, and also outside the bell icon
+    if (isClickOutsideDropdown && isClickOutsideNotifications && isClickOutsideBellIcon) {
       setShowDropdown(false);
+      setShowNotifications(false);
+    } else if (isClickOutsideDropdown && !isClickOutsideNotifications) {
+      // If clicking outside the dropdown but inside notifications, only hide the dropdown
+      setShowDropdown(false);
+    } else if (isClickOutsideNotifications && !isClickOutsideDropdown) {
+      // If clicking outside notifications but inside dropdown, only hide the notifications
       setShowNotifications(false);
     }
   };
@@ -154,7 +164,7 @@ const Header = () => {
             </div>
           </>
         ) : (
-          <Link to="/login">Log in</Link>
+          <Link className= "login-link" to="/login">Log in</Link>
         )}
       </nav>
     </header>
