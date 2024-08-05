@@ -13,13 +13,12 @@ const __dirname = path.dirname(__filename);
 
 // Define the directory for storing files
 const createProductDir = (productId) => {
-  const productUploadDir = path.join(__dirname, '../uploads', productId.toString());
+  const productUploadDir = path.join(__dirname, '../uploads/products', productId.toString());
   if (!fs.existsSync(productUploadDir)) {
     fs.mkdirSync(productUploadDir, { recursive: true });
   }
   return productUploadDir;
 };
-
 // Define multer storage configuration
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -35,6 +34,15 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
+router.get('/api/products', async (req, res) => {
+  try {
+    const products = await Product.find({});
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving products', error });
+  }
+});
 
 
 router.get('/api/products/:id',async (req,res)=> {
@@ -106,14 +114,14 @@ router.post('/api/products/new', (req, res) => {
 });
 
 
+router.post('/api/products/byIds', async (req, res) => {
+  const { productIds } = req.body;
 
-
-router.get('/api/products', async (req, res) => {
   try {
-    const products = await Product.find({});
-    res.json(products);
+    const products = await Product.find({ _id: { $in: productIds } });
+    res.status(200).json(products);
   } catch (error) {
-    res.status(500).json({ message: 'Error retrieving products', error });
+    res.status(500).json({ message: 'Failed to fetch products', error });
   }
 });
 

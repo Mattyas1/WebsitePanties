@@ -94,13 +94,13 @@ const ViewProduct = () => {
   const handleFavoriteClick = async () => {
     try {
       if (isAuthenticated) {
-        const response = await axios.post(`${API_BASE_URL}/api/user/favorite/${user._id}`, { productId });
+        const response = await axios.post(`${API_BASE_URL}/api/user/${user._id}/favorite`, { productId });
         const updatedFavoriteProducts = response.data.favoriteProducts;
         setUser((prevUser) => ({
           ...prevUser,
           favoriteProducts: updatedFavoriteProducts
         }));
-        setFavoriteError(null); // Clear any previous errors
+        setFavoriteError(null); 
         console.log("favorite product set/unset")
       } else {
         setFavoriteError('You need to be logged in to add favorites.');
@@ -121,8 +121,8 @@ const ViewProduct = () => {
       setBiddingError('This auction is already finished');
       return
     }
-    if (userBid > user.coins) {
-      setBiddingError('Not enough coins');
+    if (userBid > user.wallet.amount) {
+      setBiddingError('Not enough balance in your wallet ');
       return;
     }
     if (userBid <= (product.bid ? product.bid.amount : product.startingPrice) ) {
@@ -183,8 +183,9 @@ const ViewProduct = () => {
           />
         </h1>
         {favoriteError && <p className="error-message">{favoriteError}</p>}
-        <p className="product-price">Current Highest Bid: {product.bid ? `${product.bid.amount}` : `${product.startingPrice}`} 🪙 </p>
+        <p className="product-price">Current Highest Bid: {product.bid ? `${product.bid.amount}` : `${product.startingPrice}`} $ </p>
         <p className="product-description">Description: {product.description}</p>
+        <p className="product-model">Model: {product.model.username}</p>
         <p className="product-category">Category: {product.category}</p>
         <p className="auction-timer">Time remaining: {timeRemaining}</p>
 
@@ -215,7 +216,7 @@ const ViewProduct = () => {
         overlayClassName="overlay"
       >
         <h2>Confirm Bid</h2>
-        <p>You are about to bid {userBid} coins for this product. Are you sure?</p>
+        <p>You are about to bid {userBid} $ for this product. Are you sure?</p>
         <div className="modal-buttons">
           <button className='modal-button' onClick={handleConfirmBid}>Confirm</button>
           <button className= 'modal-button cancel' onClick={() => setIsConfirmModalOpen(false)}>Cancel</button>

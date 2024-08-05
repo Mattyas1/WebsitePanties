@@ -10,7 +10,7 @@ const Success = () => {
       <h1 className="success-title">Payment Successful!</h1>
       <p className="success-message">
         Thank you for your purchase. Your transaction has been completed successfully. 
-        Coins have been added to your wallet.
+        Your wallet balance has been updated.
       </p>
       <button className="success-button" onClick={() => navigate('/')}>
         Go to Homepage

@@ -1,30 +1,26 @@
-import User from "../mongoose/schemas/User.mjs"
 import { sendEmail } from "./mailsFunction.mjs";
 import {sendNotificationUpdate} from '../websocket/websocketServer.mjs'
 
 
-export const sendWinningNotification = async (product) => {
+export const sendWinningNotification = async (winner, product) => {
     try {
-    const winnerId = product.bid.bidderId;
-    const winner = await User.findById(winnerId);
-
     if (!winner) {
-        console.log("The winner of the product ", product._id, " was not found");
+        console.log("The winner of the product ", product._id, " was not passed");
         return null
     };
     const message = `You just won the following Auction: ${product.name}.  Check your email for more information`
-    await sendNotificationUpdate(winner.id, message);
+    await sendNotificationUpdate(winner, message);
 
     const winnerMailSubject = `Congratulation on winning ${product.name}`;
     const winnerMailText = `The auction just terminated and you are officially the winner of the following product: ${product.name}
-     for the price of : ${product.bid.amount} coins!  You will soon be informed details about the delivery of your product from
+     for the price of : ${product.bid.amount} $!  You will soon be informed details about the delivery of your product from
      our shipping team. Well done and good luck for futur auctions ;)`;
     await sendEmail(winner.email,winnerMailSubject, winnerMailText );
     console.log (`Winning email sent to ${winner.email} for product ${product._id}`);
 
-    const deliveryMailSubject = `Product ${product.name} won by ${winner.name}`;
+    const deliveryMailSubject = `Product ${product.name} won by ${winner.username}`;
         const deliveryMailText = `
-            The product ${product.name} has been won by ${winner.name} for ${product.bid.amount} coins.
+            The product ${product.name} has been won by ${winner.username} for ${product.bid.amount} $.
             Please arrange for delivery.
         `;
         const deliveryStaffEmail = "delivery@company.com"; 

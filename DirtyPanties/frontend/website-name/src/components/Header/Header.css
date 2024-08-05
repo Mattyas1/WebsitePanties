@@ -43,6 +43,19 @@ nav a.home-link:hover {
   color: #61dafb; 
 }
 
+nav a.partners-link {
+  position: relative;
+  bottom: 2px;
+  right:20px;
+  font-size: 20px; 
+  font-family: 'Arial', sans-serif; 
+  transition: color 0.3s; 
+}
+
+nav a.partners-link:hover {
+  color: #61dafb; 
+}
+
 nav a.login-link {
   position: relative;
   bottom: 2px;
@@ -156,8 +169,8 @@ nav a.login-link:hover {
   background-color: #ddd;
 }
 
-.user-coins {
+.user-wallet {
   margin-left: 10px;
   font-size: 18px;
-  color: #ffd700; /* Gold color for the coins */
+  color: #ffd700; 
 }

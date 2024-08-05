@@ -4,44 +4,47 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from '../../constants';
 import { AuthContext } from '../../context/AuthContext';
+import BidHistoryList from '../../components/BidHistoryList/BidHistoryList'; // Ensure correct path
+import WinHistoryList from '../../components/WinHistoryList/WinHistoryList'; // Ensure correct path
 
 const History = () => {
-    const { setUser, user } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const [initialLoad, setInitialLoad] = useState(true);
+    const [bidHistory, setBidHistory] = useState([]);
+    const [winHistory, setWinHistory] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchUser = async (userId) => {
+        const fetchUserHistory = async (userId) => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/api/user/${userId}`);
+                const response = await axios.get(`${API_BASE_URL}/api/user/${userId}/history`);
                 console.log(response.data);
-                setUser(response.data);
-                setInitialLoad(false); // Update flag to prevent future refetches
+                setBidHistory(response.data.bidHistory);
+                setWinHistory(response.data.winHistory);
+                setInitialLoad(false);
             } catch (error) {
-                console.error('Error fetching user:', error);
+                console.error('Error fetching user history:', error);
             }
         };
 
         if (initialLoad && user && user._id) {
-            fetchUser(user._id);
+            fetchUserHistory(user._id);
         }
-    }, [user, initialLoad, setUser]);
+    }, [user, initialLoad]);
 
     return (
         <div>
             <button className="back-button" onClick={() => navigate(-1)}>Back</button>
             <div className="history-container">
+            <h2>Historique des Gains</h2>
+                {winHistory.length > 0 ? (
+                    <WinHistoryList winHistory={winHistory} />
+                ) : (
+                    <p>Aucun gain trouvé.</p>
+                )}
                 <h2>Historique des Enchères</h2>
-                {user && user.bidHistory && user.bidHistory.length > 0 ? (
-                    <ul className="bid-history-list">
-                        {[...user.bidHistory].reverse().map((bid, index) => (
-                            <li key={index} className="bid-history-item">
-                                <p><strong>Produit:</strong> {bid.productName}</p>
-                                <p><strong>Montant de l'offre:</strong> ${bid.bidAmount}</p>
-                                <p><strong>Date de l'offre:</strong> {new Date(bid.bidDate).toLocaleString()}</p>
-                            </li>
-                        ))}
-                    </ul>
+                {bidHistory.length > 0 ? (
+                    <BidHistoryList bidHistory={bidHistory} />
                 ) : (
                     <p>Aucune offre trouvée.</p>
                 )}

@@ -29,7 +29,7 @@ const ProductList = ({ products }) => {
           {isAuctionEnded(product.auctionDate) ? (
             <p>Auction Ended</p>
           ) : (
-            <p>Current bid: {product.bid ? `${product.bid.amount} coins` : `${product.startingPrice} coins`}</p>
+            <p>Current bid: {product.bid ? `${product.bid.amount} $` : `${product.startingPrice} $`}</p>
           )}
         </div>
       ))}

@@ -39,7 +39,7 @@
   color: red; 
 }
 
-.product-price, .product-description, .product-category, .auction-timer {
+.product-price, .product-description, .product-category, .auction-timer, .product-model {
   margin-bottom: 10px;
   font-size: 1.2em;
 }

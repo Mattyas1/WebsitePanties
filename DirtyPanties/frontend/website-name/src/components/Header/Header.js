@@ -95,8 +95,8 @@ const Header = () => {
     }
   };
 
-  const handleBuyCoins = () => {
-    navigate("/buycoins");
+  const handleRechargeWallet = () => {
+    navigate("/rechargewallet");
   };
 
   const handleSettings = () => {
@@ -126,6 +126,7 @@ const Header = () => {
       <img src={logo} alt="Logo" onClick={() => navigate('/')} />
       <nav>
         <Link className='home-link' to="/">Home</Link>
+        <Link className='partners-link' to="/partners">Partners</Link>
         {isAuthenticated ? (
           <>
             <div className="notification-icon" onClick={toggleNotifications} ref={bellIconRef}>
@@ -150,7 +151,7 @@ const Header = () => {
               {showDropdown && (
                 <div className="dropdown-content">
                   <button onClick={handleSettings}>Settings</button>
-                  <button onClick={handleBuyCoins}>Buy Coins</button>
+                  <button onClick={handleRechargeWallet}>Recharge Wallet</button>
                   <button onClick={handleHistory}>History</button>
                   {user.role === 'admin' && (
                     <button onClick={handleAdmin}>ADMIN</button>
@@ -158,8 +159,8 @@ const Header = () => {
                   <button onClick={handleLogout}>Logout</button>
                 </div>
               )}
-              <div className="user-coins">
-                {user?.coins !== undefined ? `${user.coins} 🪙` : 'Loading coins...'}
+              <div className="user-wallet">
+                {user?.wallet.amount !== undefined ? `${user.wallet.amount} $` : 'Loading wallet...'}
               </div>
             </div>
           </>

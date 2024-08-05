@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const BidHistorySchema = new mongoose.Schema({
     productId: {
@@ -19,6 +19,26 @@ const BidHistorySchema = new mongoose.Schema({
       default: Date.now
     }
   });
+
+const  WinHistorySchema = new mongoose.Schema({
+  productId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product',
+    required: true
+  },
+  productName : {
+    type: String,
+    required: true
+  },
+  paidAmount: {
+    type: Number,
+    required: true
+  },
+  winDate: {
+    type: Date,
+    default: Date.now
+  }
+});
 
   const NotificationSchema = new mongoose.Schema({
     message: {
@@ -62,8 +82,11 @@ const UserSchema = new mongoose.Schema({
     refreshToken : {
         type: mongoose.Schema.Types.String,
     },
-    coins: {
-        type: mongoose.Schema.Types.Number,
+    wallet: {
+      amount: {
+          type: Number,
+          default: 0
+      }
     },
     role: {
         type: String,
@@ -71,6 +94,7 @@ const UserSchema = new mongoose.Schema({
         default: 'user' 
     },
     bidHistory: [BidHistorySchema],
+    winHistory: [WinHistorySchema],
     notifications: [NotificationSchema],
     favoriteProducts: [
       {
@@ -92,13 +116,38 @@ const UserSchema = new mongoose.Schema({
           ref: 'User',
           required: true
         },
-        userName : {
+        username : {
+          type: String,
+          required: true
+        },
+      }
+    ],
+
+
+
+    sellingProducts: [
+      {
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Product',
+          required: true
+        },
+        productName : {
           type: String,
           required: true
         },
       }
     ]
 });
+
+UserSchema.pre('save', function(next) {
+  // Remove properties that are not relevant for the current category
+  if (this.role !== 'partner') {
+    this.sellingProducts = undefined;
+  } 
+  next();
+});
+
 
 const User = mongoose.model('User', UserSchema);
 

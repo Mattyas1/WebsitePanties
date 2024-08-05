@@ -10,9 +10,7 @@ const userConnections = {};
 //Pour enregistrer les connexions pour chaques produits
 const clientSubscriptions = {};
 
-const sendNotificationUpdate = async (userId, message) => {
-    const user = await User.findById(userId);
-
+const sendNotificationUpdate = async (user, message) => {
     if(user){
         const notification = {
             message,
@@ -25,8 +23,8 @@ const sendNotificationUpdate = async (userId, message) => {
             type:'notificationUpdate',
             data: notification
         });
-        if (userConnections[userId]){
-            const client = userConnections[userId];
+        if (userConnections[user._id]){
+            const client = userConnections[user._id];
             if (client.readyState===WebSocket.OPEN) {
                 client.send(updateMessage);
             }
@@ -101,6 +99,7 @@ wss.on ('connection', async (ws) => {
                             bid: product.bid,
                             images: product.images,
                             startingPrice: product.startingPrice,
+                            model: product.model
                         }
                     }));
                 };

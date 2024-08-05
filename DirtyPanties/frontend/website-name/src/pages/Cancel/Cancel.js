@@ -14,7 +14,7 @@ const Cancel = () => {
         <p>It looks like you cancelled the payment process.</p>
         <p>If you need assistance or wish to try again, please use the button below.</p>
         <button className="retry-button" onClick={() => navigate('/')}>Go to Home</button>
-        <button className="retry-button" onClick={() => navigate('/buyCoins')}>Try Again</button>
+        <button className="retry-button" onClick={() => navigate('/rechargewallet')}>Try Again</button>
       </div>
     </div>
   );

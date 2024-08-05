@@ -46,7 +46,6 @@ export const WebSocketProvider = ({ children }) => {
     setSocket(ws);
 
     return () => {
-      console.log("HERe")
       ws.close();
       setSocket(null);
     };

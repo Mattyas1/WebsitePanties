@@ -108,7 +108,7 @@ router.post('/api/user/resetPassword', async (req, res) => {
     }
   });
 
-  router.post('/api/user/favorite/:userId', async (req,res) => {
+  router.post('/api/user/:userId/favorite', async (req,res) => {
     const {productId} = req.body;
     const {userId} = req.params;
 
@@ -144,9 +144,8 @@ router.post('/api/user/resetPassword', async (req, res) => {
     }
   });
 
-  router.get('/api/users/:userId/favorites', async (req, res) => {
+  router.get('/api/user/:userId/favorites', async (req, res) => {
     try {
-      console.log(req.session)
       const userId = req.params.userId;
       if (!req.session.userId || req.session.userId !== userId) {
         return res.status(403).json({ message: 'Access denied' });
@@ -157,12 +156,7 @@ router.post('/api/user/resetPassword', async (req, res) => {
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
-  
-      // Extract product IDs from favoriteProducts
-      const favoriteProductIds = user.favoriteProducts.map(fav => fav.productId._id);
-  
-      const products = await Product.find({ _id: { $in: favoriteProductIds } });
-  
+      const products = user.favoriteProducts.map(fav => fav.productId);
       // Respond with the list of products
       res.json(products);
     } catch (error) {
@@ -170,5 +164,103 @@ router.post('/api/user/resetPassword', async (req, res) => {
       res.status(500).json({ message: 'Server error' });
     }
   });
+
+
+
+  router.post('/api/user/:userId/subscribe', async (req, res) => {
+    const { partnerId } = req.body;
+    const { userId } = req.params;
+
+    // Ensure the user is authenticated and authorized
+    if (!req.session.userId || req.session.userId !== userId) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
+    try {
+      // Find the user and partner
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      const partner = await User.findById(partnerId).select('username');
+      if (!partner) {
+        return res.status(404).json({ message: 'Partner not found' });
+      }
+
+      // Check if the user is already subscribed to the partner
+      const subscriptionIndex = user.subscribedPartners.findIndex(
+        (sub) => sub.userId.toString() === partnerId
+      );
+
+      if (subscriptionIndex > -1) {
+        // If already subscribed, remove the subscription
+        user.subscribedPartners.splice(subscriptionIndex, 1);
+      } else {
+        // Otherwise, add the subscription
+        user.subscribedPartners.push({
+          userId: partnerId,
+          username: partner.username
+        });
+    }
+
+    await user.save();
+
+    // Respond with the updated subscribedPartners array
+    res.json({ subscribedPartners: user.subscribedPartners });
+  } catch (error) {
+    console.error('Error subscribing to partner:', error);
+    res.status(500).json({ message: 'Server error', error });
+  }
+  });
+
+  router.get('/api/user/:userId/subscriptions', async (req, res) => {
+    try {
+      const userId = req.params.userId;
+  
+      if (!req.session.userId || req.session.userId !== userId) {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+  
+      const user = await User.findById(userId)
+        .select('subscribedPartners')
+        .populate({
+          path: 'subscribedPartners.userId',
+          select: 'username email', // Select only specific fields
+        });
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      const subscribedPartners = user.subscribedPartners.map(sub => sub.userId);
+  
+      res.json(subscribedPartners);
+    } catch (error) {
+      console.error('Error fetching subscriptions:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+  // server.js or routes file
+router.get('/api/user/:userId/history', async (req, res) => {
+  const { userId } = req.params;
+
+  if (!req.session.userId || req.session.userId !== userId) {
+    return res.status(403).json({ message: 'Access denied' });
+  }
+
+  try {
+    const user = await User.findById(userId).select('bidHistory winHistory');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ bidHistory: user.bidHistory, winHistory: user.winHistory });
+  } catch (error) {
+    console.error('Error fetching user history:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 export default router;

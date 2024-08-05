@@ -14,7 +14,10 @@ const updateProducts = async () => {
 
         // Update all existing products to include the new bid property with default values
         await Product.updateMany({}, {
-            $set: { isSold: 'false' }
+            $set: { model: {
+                userId : '66ae901937850b6c137ae379',
+                username : 'Jean-Pierre BandeMou'
+            } }
         });
 
         console.log('Products updated successfully.');

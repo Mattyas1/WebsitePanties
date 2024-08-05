@@ -1,0 +1,17 @@
+/* BidHistoryList.css */
+.bid-history-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.bid-history-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.bid-history-item p {
+    margin: 5px 0;
+}

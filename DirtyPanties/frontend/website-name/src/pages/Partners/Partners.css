@@ -1,0 +1,25 @@
+.partner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh; /* Ensure the container takes full viewport height */
+  text-align: center;
+  padding: 20px;
+  background-color: #f0f2f5;
+};
+
+.partner-container h1 {
+  font-size: 2.5rem; 
+  margin-bottom: 10px;
+}
+
+.partner-container p {
+  font-size: 1.2rem; 
+  color: #333;
+}
+
+.back-button {
+    margin-bottom: 20px;
+    align-self: flex-start;
+  }

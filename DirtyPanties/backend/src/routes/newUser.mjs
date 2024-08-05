@@ -19,7 +19,7 @@ router.post("/api/newUser",
     data.password = await hashPassword(data.password);
 
     const newUser = new User(data);
-    newUser.coins=0;
+    newUser.wallet.amount=0;
     try {
         await newUser.save();
         console.log("New user created :", newUser._id)

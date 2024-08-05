@@ -23,8 +23,11 @@ router.post('/api/bids/place', async (req,res) => {
             console.log("Bid tried on an ended auction0");
             return res.status(404).json({ error: 'Auction is already finished' });
          };
+
+         let previousBidder
          if(bid){
-            const previousBidder = await User.findById(bid.bidderId);
+            console.log("HERE DEFINED")
+            previousBidder = await User.findById(bid.bidderId);
             if (!previousBidder) {
                 console.log("Previous Bidder not found")
                 return res.status(404).json({ error: 'Previous Bidder not found' });
@@ -38,9 +41,9 @@ router.post('/api/bids/place', async (req,res) => {
              return res.status(404).json({ error: 'User not found' });
          }
  
-         // Check if user has enough coins
-         if (user.coins < userBid) {
-             return res.status(400).json({ error: 'Insufficient coins' });
+         // Check if user has enough balance in the wallet 
+         if (user.wallet.amount < userBid) {
+             return res.status(400).json({ error: 'Insufficient balance in your wallet' });
          };
 
          if (userBid < (bid? bid.amount : product.startingPrice)) {
@@ -48,7 +51,7 @@ router.post('/api/bids/place', async (req,res) => {
         }
 
         if (bid) {
-            previousBidder.coins = previousBidder.coins + product.bid.amount;
+            previousBidder.wallet.amount = previousBidder.wallet.amount + product.bid.amount;
             //send him a notification here
             await previousBidder.save();
             if (toString(user._id) === toString(previousBidder._id)){
@@ -67,7 +70,7 @@ router.post('/api/bids/place', async (req,res) => {
         product.bid = updatedBid;
         const updatedProduct = await product.save();
 
-        user.coins = user.coins - userBid;
+        user.wallet.amount = user.wallet.amount - userBid;
         const bidHistory = {
             productId: productId,
             productName : product.name,

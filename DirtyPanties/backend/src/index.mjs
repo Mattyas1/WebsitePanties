@@ -7,9 +7,9 @@ import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
 import mainRouter from "./routes/mainRouter.mjs";
 import newUserRouter from "./routes/newUser.mjs";
+import webhookRouter from './routes/webhook.mjs'
 import { routerWithoutSession } from "./routes/auth.mjs";
 import cors from "cors";
-import bodyParser from "body-parser";
 import path from 'path';
 import { fileURLToPath } from "url";
 import { initializeScheduledTasks } from './utils/auctionfunctions.mjs';
@@ -40,8 +40,14 @@ app.use(cors({
     credentials: true
 }));
 
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(express.json());
+app.use((req, res, next) => {
+    //no parsing for the webhook endpoint
+    if (req.originalUrl === '/api/webhook') {
+      next();
+    } else {
+      express.json()(req, res, next);
+    }
+  });
 
 app.use(cookieParser());
 
@@ -57,7 +63,6 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use(newUserRouter);
 app.use(routerWithoutSession);
 app.use(mainRouter);

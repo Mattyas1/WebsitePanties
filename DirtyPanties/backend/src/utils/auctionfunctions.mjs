@@ -9,15 +9,21 @@ export const endAuction = async (product) => {
     product.isSold = true;
     await product.save();
     const winnerId = product.bid.bidderId;
-    const user = await User.findById(winnerId);
+    const winner = await User.findById(winnerId);
 
-    if (!user) {
+    if (!winner) {
       console.log(`User not found for product ${product._id}`);
       return;
     }
-
-    await sendWinningNotification(product);
-    console.log(`Auction ended for product ${product._id}, notification sent to user ${user._id}`);
+    const winHistory = {
+      productId : product._id,
+      productName : product.name,
+      paidAmount : product.bid.amount,
+      winDate : new Date(),
+    };
+    winner.winHistory.push(winHistory);
+    await sendWinningNotification(winner, product);
+    console.log(`Auction ended for product ${product._id}, notification sent to user ${winner._id}`);
   } catch (error) {
     console.error(`Error in endAuction for product ${product._id}:`, error);
   }
