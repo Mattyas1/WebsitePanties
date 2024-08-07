@@ -6,6 +6,7 @@ import bidsRouter from './bids.mjs'
 import walletRouter from './wallet.mjs'
 import partnerRouter from './partner.mjs'
 import webhookRouter from './webhook.mjs'
+import adminRouter from './admin.mjs'
 
 const router = Router()
 
@@ -16,5 +17,6 @@ router.use(bidsRouter);
 router.use(walletRouter);
 router.use(partnerRouter);
 router.use(webhookRouter);
+router.use(adminRouter)
 
 export default router;

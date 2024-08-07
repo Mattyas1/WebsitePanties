@@ -95,8 +95,8 @@ const Header = () => {
     }
   };
 
-  const handleRechargeWallet = () => {
-    navigate("/rechargewallet");
+  const handleWallet = () => {
+    navigate("/wallet");
   };
 
   const handleSettings = () => {
@@ -152,7 +152,7 @@ const Header = () => {
               {showDropdown && (
                 <div className="dropdown-content">
                   <button onClick={handleSettings}>Settings</button>
-                  <button onClick={handleRechargeWallet}>Recharge Wallet</button>
+                  <button onClick={handleWallet}>Wallet</button>
                   <button onClick={handleHistory}>History</button>
                   {user.role === 'admin' && (
                     <button onClick={handleAdmin}>ADMIN</button>

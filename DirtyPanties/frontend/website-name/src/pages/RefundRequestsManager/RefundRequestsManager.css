@@ -1,0 +1,50 @@
+.refund-requests-manager {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .refund-requests-manager h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .refund-requests-manager ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .refund-request-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .refund-request-item p {
+    margin: 5px 0;
+  }
+  
+  .refund-request-item button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .refund-request-item button:hover {
+    background-color: #0056b3;
+  }
+  
+  .error-message {
+    color: red;
+  }
+
+  .back-button {
+    margin-bottom: 20px;
+    align-self: flex-start;
+}
+  

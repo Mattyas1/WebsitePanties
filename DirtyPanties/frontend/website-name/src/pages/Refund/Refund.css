@@ -1,0 +1,88 @@
+/* General Styles for Refund Container */
+.refund-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .refund-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .refund-container p {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .refund-container form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .refund-container form input {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .refund-container form button {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #28a745;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .refund-container form button:hover {
+    background-color: #218838;
+  }
+  
+  .input-group {
+    margin-bottom: 1rem;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
+  
+  /* Modal Styles */
+  .refund-modal {
+    background: white;
+    padding: 2rem;
+    max-width: 500px;
+    border-radius: 8px;
+    text-align: left;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .refund-modal-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Ensure modal is above other content */
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+  

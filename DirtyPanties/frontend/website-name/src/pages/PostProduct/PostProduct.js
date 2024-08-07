@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from '../../constants';
 import './PostProduct.css'; // For styles
@@ -20,6 +21,7 @@ const PostProduct = () => {
   const [partners, setPartners] = useState([]);
   const [loadingPartners, setLoadingPartners] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchPartners = async () => {
@@ -86,6 +88,7 @@ const PostProduct = () => {
 
   return (
     <div className="post-product-container">
+      <button className="back-button" onClick={() => navigate(-1)}>Back</button>
       <h1>Add New Product</h1>
       <form onSubmit={handleSubmit}>
         <label>

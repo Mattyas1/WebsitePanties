@@ -1,6 +1,8 @@
 import {Router} from "express";
 import Stripe from 'stripe'; 
 import { WEBSITE_URL } from "../config/constants.mjs";
+import RefundRequest from "../mongoose/schemas/RefundRequest.mjs";
+import User from "../mongoose/schemas/User.mjs";
 
 const STRIPE_PRIVATE_KEY = process.env.STRIPE_PRIVATE_KEY;
 const router = Router();
@@ -45,6 +47,69 @@ router.post('/api/wallet/recharge', async (req, res) => {
         res.status(500).send({ error: error.message });
     }
 });
+
+router.post('/api/wallet/refund', async (req, res) => {
+    try {
+      const { userId, amount, iban, bic, accountHolderName, accountHolderAddress, bankName, bankAddress } = req.body;
+  
+      if (!userId || !amount || !iban || !bic || !accountHolderName || !accountHolderAddress || !bankName || !bankAddress) {
+        return res.status(400).json({ error: 'All fields are required' });
+      }
+  
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      if (amount <= 0) {
+        return res.status(400).json({ error: 'Refund amount must be greater than zero' });
+      }
+  
+      if (amount > user.wallet.amount) {
+        return res.status(400).json({ error: 'Refund amount exceeds wallet balance' });
+      }
+  
+      // Create a new refund application
+      const refundApplication = new RefundRequest({
+        userId,
+        amount,
+        iban,
+        bic,
+        accountHolderName,
+        accountHolderAddress,
+        bankName,
+        bankAddress,
+      });
+  
+      // Save the refund application to the database
+      await refundApplication.save();
+  
+      // Update the user's wallet amount
+      user.wallet.amount -= amount;
+      await user.save();
+  
+      res.status(201).json({ message: 'Refund request submitted successfully', updatedWallet : user.wallet });
+    } catch (error) {
+      console.error('Error submitting refund request:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  router.get('/api/wallet/refund', async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      const requests = await RefundRequest.find({ userId });
+  
+      if (requests.length > 0) {
+        res.status(200).json(requests);
+      } else {
+        res.status(204).send(); // No content
+      }
+    } catch (error) {
+      console.error('Error fetching requests:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
 
 
 export default router;

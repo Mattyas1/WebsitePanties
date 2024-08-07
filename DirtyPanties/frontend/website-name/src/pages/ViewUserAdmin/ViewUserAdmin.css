@@ -1,0 +1,78 @@
+.view-user-admin {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+.user-summary,
+.user-history,
+.user-notifications,
+.user-favorites,
+.user-subscribed-partners {
+  margin-bottom: 20px;
+}
+
+.user-summary p,
+.user-history p,
+.user-notifications p,
+.user-favorites p,
+.user-subscribed-partners p {
+  margin: 8px 0;
+}
+
+.user-summary {
+  background-color: #f4f4f4;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.user-history,
+.user-notifications,
+.user-favorites,
+.user-subscribed-partners {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-history ul,
+.user-notifications ul,
+.user-favorites ul,
+.user-subscribed-partners ul {
+  list-style: none;
+  padding: 0;
+}
+
+.history-item,
+.notification-item,
+.favorite-item,
+.partner-item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.history-item:last-child,
+.notification-item:last-child,
+.favorite-item:last-child,
+.partner-item:last-child {
+  border-bottom: none;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+  font-size: 18px;
+}

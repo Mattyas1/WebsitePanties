@@ -12,9 +12,10 @@ const AdminDashboard = () => {
   return (
     <div className="admin-dashboard">
       <h1>Admin Dashboard</h1>
-      <button onClick={() => handleNavigation('/postproduct')}>POST Product</button>
+      <button onClick={() => handleNavigation('/admin/postproduct')}>POST Product</button>
+      <button onClick={() => handleNavigation('/admin/refundrequests')}>Refund Requests</button>
       <button onClick={() => handleNavigation('/bids-history')}>Bids History</button>
-      <button onClick={() => handleNavigation('/user-lists')}>User Lists</button>
+      <button onClick={() => handleNavigation('/admin/users')}>User Lists</button>
       <button onClick={() => handleNavigation('/deliveries')}>Deliveries</button>
       <button onClick={() => handleNavigation('/moderation')}>Moderation</button>
     </div>

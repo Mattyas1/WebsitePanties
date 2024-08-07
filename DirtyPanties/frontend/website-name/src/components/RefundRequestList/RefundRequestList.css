@@ -1,0 +1,48 @@
+.refund-request-list {
+    margin-top: 2rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .refund-request-list h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  .refund-request-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .refund-request-item {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .refund-request-item p {
+    margin: 0.5rem 0;
+    color: #555;
+  }
+  
+  .refund-request-item strong {
+    color: #333;
+  }
+  
+  .refund-request-item .status {
+    font-weight: bold;
+    color: #007bff;
+  }
+  
+  .refund-request-item .note {
+    font-style: italic;
+    color: #888;
+  }
+  

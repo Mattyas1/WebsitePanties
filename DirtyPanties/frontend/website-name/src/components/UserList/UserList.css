@@ -1,0 +1,40 @@
+.user-list {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .user-list h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .user-list table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .user-list table, th, td {
+    border: 1px solid #ddd;
+  }
+  
+  .user-list th, td {
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .user-list th {
+    background-color: #f4f4f4;
+  }
+  
+  .user-list tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .user-list tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .error-message {
+    color: red;
+  }
+  

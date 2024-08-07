@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import './RechargeWallet.css'; 
+import './Wallet.css'; 
 import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
+import { Link } from 'react-router-dom';
 import { STRIPE_PUBLIC_KEY, API_BASE_URL } from '../../constants';
 
-const RechargeWallet = () => {
+const Wallet = () => {
   const quickAmounts = [10, 100, 1000];
   const [customAmount, setCustomAmount] = useState('');
   const currency = 'usd';
@@ -79,8 +80,14 @@ const RechargeWallet = () => {
           <button type="submit">Add Now</button>
         </form>
       </div>
+      <div className="refund-section">
+        <h2>Need a Refund?</h2>
+        <Link to="/refund">
+          <button>Go to Refund Page</button>
+        </Link>
+      </div>
     </div>
   );
 };
 
-export default RechargeWallet;
+export default Wallet;
