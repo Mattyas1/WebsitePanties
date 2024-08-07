@@ -30,43 +30,32 @@ nav a:hover, .dropdown button:hover {
   color: #61dafb;
 }
 
-nav a.home-link {
-  position: relative;
-  bottom: 2px;
-  right:20px;
-  font-size: 20px; 
-  font-family: 'Arial', sans-serif; 
-  transition: color 0.3s; 
+nav a.home-link, nav a.partners-link, nav a.login-link {
+  font-size: 20px;
+  font-family: 'Arial', sans-serif;
+  transition: color 0.3s;
 }
 
-nav a.home-link:hover {
-  color: #61dafb; 
+nav a.home-link:hover, nav a.partners-link:hover, nav a.login-link:hover {
+  color: #61dafb;
 }
 
-nav a.partners-link {
-  position: relative;
-  bottom: 2px;
-  right:20px;
-  font-size: 20px; 
-  font-family: 'Arial', sans-serif; 
-  transition: color 0.3s; 
+nav a.become-partner-link {
+  font-size: 20px;
+  font-family: 'Arial', sans-serif;
+  transition: color 0.3s, background-color 0.3s, box-shadow 0.3s;
+  color: white;
+  background-color: #007bff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-nav a.partners-link:hover {
-  color: #61dafb; 
-}
-
-nav a.login-link {
-  position: relative;
-  bottom: 2px;
-  right:20px;
-  font-size: 20px; 
-  font-family: 'Arial', sans-serif; 
-  transition: color 0.3s; 
-}
-
-nav a.login-link:hover {
-  color: #61dafb; 
+nav a.become-partner-link:hover {
+  color: white;
+  background-color: #0056b3;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
 
 .notification-icon {

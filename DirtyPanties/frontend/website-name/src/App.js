@@ -6,6 +6,7 @@ import ResetPassword from './pages/ResetPassword/ResetPassword'
 import NewPassword from './pages/NewPassword/NewPassword';
 import Home from './pages/Home/Home';
 import Partners from './pages/Partners/Partners';
+import BecomePartner from './pages/BecomePartner/BecomePartner';
 import ViewPartner from './pages/ViewPartner/ViewPartner';
 import NotFound from './pages/NotFound/NotFound';
 import Register from './pages/Register/Register';
@@ -36,6 +37,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/partners" element= {<Partners/>} />
+              <Route path="/becomepartner" element= {<BecomePartner/>} />
               <Route path="/viewpartner/:partnerId" element={<ViewPartner/>} />
               <Route path="/login" element={<Login />} />
               <Route path="/resetpassword" element={<ResetPassword />} />

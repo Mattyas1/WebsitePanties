@@ -125,6 +125,7 @@ const Header = () => {
     <header>
       <img src={logo} alt="Logo" onClick={() => navigate('/')} />
       <nav>
+        <Link className='become-partner-link' to="/becomepartner">Become Partner</Link>
         <Link className='home-link' to="/">Home</Link>
         <Link className='partners-link' to="/partners">Partners</Link>
         {isAuthenticated ? (

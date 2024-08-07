@@ -102,7 +102,7 @@ router.post('/api/products/new', (req, res) => {
       return res.status(400).json({ message: 'No files uploaded' });
     }
 
-    const imagePaths = files.map(file => path.join('uploads', product._id.toString(), file.filename));
+    const imagePaths = files.map(file => path.join('uploads','products', product._id.toString(), file.filename));
     product.images = imagePaths;
     await product.save();
 
