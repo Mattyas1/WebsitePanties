@@ -4,13 +4,17 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../../constants';
 import axios from 'axios';
 import "./NewPassword.css";
+import { useTranslation } from 'react-i18next';
+
 
 const NewPassword = () => {
   const { token } = useParams();
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+
 
   const handleReset = async (e) => {
     e.preventDefault();
@@ -30,7 +34,7 @@ const NewPassword = () => {
   return (
     <form onSubmit={handleReset} className='reset-password-form'>
       <div>
-        <label>New Password:</label>
+        <label>{t('newPassword')}</label>
         <input
           type="password"
           value={password}
@@ -38,9 +42,9 @@ const NewPassword = () => {
           required
         />
       </div>
-      <button type="submit">Reset Password</button>
-      {message && <p className='message-success'>{message}</p>}
-      {error && <p className='message-error'>{error}</p>}
+      <button type="submit">{t('resetPassword')}</button>
+      {message && <p className='message-success'>{t('messageSuccess')}</p>}
+      {error && <p className='message-error'>{t('messageError')}</p>}
     </form>
   );
 };

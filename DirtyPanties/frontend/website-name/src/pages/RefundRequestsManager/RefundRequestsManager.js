@@ -3,12 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from '../../constants';
 import './RefundRequestsManager.css';
+import { useTranslation } from 'react-i18next';
+
 
 const RefundRequestsManager = () => {
   const [refundRequests, setRefundRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+
 
   useEffect(() => {
     const fetchRefundRequests = async () => {
@@ -52,30 +56,31 @@ const RefundRequestsManager = () => {
 
   return (
     <div className="refund-requests-manager">
-      <button className="back-button" onClick={() => navigate(-1)}>Back</button>
-      <h1>Manage Refund Requests</h1>
-      {refundRequests.length === 0 ? (
-        <p>No refund requests to process.</p>
-      ) : (
-        <ul>
-          {refundRequests.map((request) => (
-            <li key={request._id} className="refund-request-item">
-              <p><strong>User ID:</strong> ${request.userId}</p>
-              <p><strong>Refund Amount:</strong> ${request.amount}</p>
-              <p><strong>IBAN:</strong> {request.iban}</p>
-              <p><strong>BIC/SWIFT:</strong> {request.bic}</p>
-              <p><strong>Account Holder's Name:</strong> {request.accountHolderName}</p>
-              <p><strong>Account Holder's Address:</strong> {request.accountHolderAddress}</p>
-              <p><strong>Bank Name:</strong> {request.bankName}</p>
-              <p><strong>Bank Address:</strong> {request.bankAddress}</p>
-              <p><strong>Status:</strong> {request.status}</p>
-              <p><strong>Created At:</strong> {new Date(request.createdAt).toLocaleDateString()}</p>
-              <button onClick={() => handleMarkAsHandled(request._id)}>Mark as Handled</button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+  <button className="back-button" onClick={() => navigate(-1)}>{t('back')}</button>
+  <h1>{t('manageRefundRequests')}</h1>
+  {refundRequests.length === 0 ? (
+    <p>{t('noRefundRequests')}</p>
+  ) : (
+    <ul>
+      {refundRequests.map((request) => (
+        <li key={request._id} className="refund-request-item">
+          <p><strong>{t('userId')}:</strong> {request.userId}</p>
+          <p><strong>{t('refundAmount')}:</strong> ${request.amount}</p>
+          <p><strong>{t('iban')}:</strong> {request.iban}</p>
+          <p><strong>{t('bic')}:</strong> {request.bic}</p>
+          <p><strong>{t('accountHolderName')}:</strong> {request.accountHolderName}</p>
+          <p><strong>{t('accountHolderAddress')}:</strong> {request.accountHolderAddress}</p>
+          <p><strong>{t('bankName')}:</strong> {request.bankName}</p>
+          <p><strong>{t('bankAddress')}:</strong> {request.bankAddress}</p>
+          <p><strong>{t('status')}:</strong> {request.status}</p>
+          <p><strong>{t('createdAt')}:</strong> {new Date(request.createdAt).toLocaleDateString()}</p>
+          <button onClick={() => handleMarkAsHandled(request._id)}>{t('markAsHandled')}</button>
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
+
   );
 };
 

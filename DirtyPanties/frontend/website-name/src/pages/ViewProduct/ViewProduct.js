@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { AuthContext } from '../../context/AuthContext';
 import { useWebSocket } from '../../context/WebSocketContext';
+import { useTranslation } from 'react-i18next';
+
 
 const ViewProduct = () => {
   const navigate = useNavigate();
@@ -15,6 +17,8 @@ const ViewProduct = () => {
   const [product, setProduct] = useState(null);
   const { isAuthenticated, setUser, user } = useContext(AuthContext);
   const {socket, ready, registerMessageHandler, unregisterMessageHandler} = useWebSocket();
+  const { t } = useTranslation();
+
 
   const [timeRemaining, setTimeRemaining] = useState('');
   const [userBid, setUserBid] = useState('');
@@ -168,7 +172,7 @@ const ViewProduct = () => {
 
   return (
     <div className="view-product-container">
-      <button className="back-button" onClick={() => navigate(-1)}>Back</button>
+      <button className="back-button" onClick={() => navigate(-1)}>{t('back')}</button>
       <div className="product-image">
         <img src={`${API_BASE_URL}/${product.images[0]}`} alt={product.name} />
       </div>
@@ -176,18 +180,18 @@ const ViewProduct = () => {
         <h1 className="product-title">
           {product.name}
           <FontAwesomeIcon 
-          icon={faHeart} 
-          className="favorite-icon" 
-          onClick={handleFavoriteClick} 
-          style={{ color: heartColor }}
+            icon={faHeart} 
+            className="favorite-icon" 
+            onClick={handleFavoriteClick} 
+            style={{ color: heartColor }}
           />
         </h1>
         {favoriteError && <p className="error-message">{favoriteError}</p>}
-        <p className="product-price">Current Highest Bid: {product.bid ? `${product.bid.amount}` : `${product.startingPrice}`} $ </p>
-        <p className="product-description">Description: {product.description}</p>
-        <p className="product-model">Model: {product.model.username}</p>
-        <p className="product-category">Category: {product.category}</p>
-        <p className="auction-timer">Time remaining: {timeRemaining}</p>
+        <p className="product-price">{t('currentHighestBid')}: {product.bid ? `${product.bid.amount}` : `${product.startingPrice}`} $</p>
+        <p className="product-description">{t('description')}: {product.description}</p>
+        <p className="product-model">{t('model')}: {product.model.username}</p>
+        <p className="product-category">{t('category')}: {product.category}</p>
+        <p className="auction-timer">{t('timeRemaining')}: {timeRemaining}</p>
 
         <div className="bid-section">
           {isAuthenticated ? (
@@ -196,13 +200,13 @@ const ViewProduct = () => {
                 type="number"
                 value={userBid}
                 onChange={handleBidChange}
-                placeholder="Place your bid"
+                placeholder={t('placeYourBid')}
               />
-              <button onClick={handleBidSubmit}>Submit Bid</button>
+              <button onClick={handleBidSubmit}>{t('submitBid')}</button>
               {biddingError && <p className="error-message">{biddingError}</p>}
             </>
           ) : (
-            <button onClick={() => navigate('/login')}>Login to place a bid</button>
+            <button onClick={() => navigate('/login')}>{t('loginToPlaceBid')}</button>
           )}
         </div>
       </div>
@@ -211,15 +215,15 @@ const ViewProduct = () => {
       <Modal
         isOpen={isConfirmModalOpen}
         onRequestClose={() => setIsConfirmModalOpen(false)}
-        contentLabel="Confirm Bid"
+        contentLabel={t('confirmBid')}
         className="modal"
         overlayClassName="overlay"
       >
-        <h2>Confirm Bid</h2>
-        <p>You are about to bid {userBid} $ for this product. Are you sure?</p>
+        <h2>{t('confirmBid')}</h2>
+        <p>{t('confirmBidMessage', { bidAmount: userBid })}</p>
         <div className="modal-buttons">
-          <button className='modal-button' onClick={handleConfirmBid}>Confirm</button>
-          <button className= 'modal-button cancel' onClick={() => setIsConfirmModalOpen(false)}>Cancel</button>
+          <button className='modal-button' onClick={handleConfirmBid}>{t('confirm')}</button>
+          <button className='modal-button cancel' onClick={() => setIsConfirmModalOpen(false)}>{t('cancel')}</button>
         </div>
       </Modal>
 
@@ -227,15 +231,16 @@ const ViewProduct = () => {
       <Modal
         isOpen={isSuccessModalOpen}
         onRequestClose={() => setIsSuccessModalOpen(false)}
-        contentLabel="Bid Success"
+        contentLabel={t('bidSuccess')}
         className="modal"
         overlayClassName="overlay"
       >
-        <h2>Bid Placed Successfully</h2>
-        <p>Your bid has been placed successfully.</p>
-        <button onClick={() => setIsSuccessModalOpen(false)}>Close</button>
+        <h2>{t('bidSuccess')}</h2>
+        <p>{t('bidPlacedSuccessfully')}</p>
+        <button onClick={() => setIsSuccessModalOpen(false)}>{t('close')}</button>
       </Modal>
     </div>
+
   );
 };
 

@@ -1,21 +1,25 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Success.css';
+import { useTranslation } from 'react-i18next';
+
 
 const Success = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
 
   return (
     <div className="success-container">
-      <h1 className="success-title">Payment Successful!</h1>
+      <h1 className="success-title">{t('paymentSuccessful')}</h1>
       <p className="success-message">
-        Thank you for your purchase. Your transaction has been completed successfully. 
-        Your wallet balance has been updated.
+        {t('paymentSuccessMessage')}
       </p>
       <button className="success-button" onClick={() => navigate('/')}>
-        Go to Homepage
+        {t('goToHomepage')}
       </button>
     </div>
+
   );
 };
 

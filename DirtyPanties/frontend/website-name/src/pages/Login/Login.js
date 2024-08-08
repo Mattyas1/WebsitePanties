@@ -7,12 +7,14 @@ import Cookies from 'js-cookie';
 import "./Login.css"
 import { API_BASE_URL } from '../../constants';
 import { AuthContext } from '../../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 const Login = () => {
   const {setUser, setIsAuthenticated, isAuthenticated } = useContext(AuthContext);
   const [isPosting, setIsPosting] = useState(false);
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
+  const { t } = useTranslation();
 
   const handleLogin = async (username, password) => {
     setIsPosting(true)
@@ -29,7 +31,6 @@ const Login = () => {
       setIsPosting(false);
       navigate('/')
 
-      //navigate('/main');  to be defined later
     } catch(error) {
       setIsPosting(false);
       if (error.response){
@@ -44,18 +45,18 @@ const Login = () => {
 
   return (
     <div className='login-container'>
-      <h1>Login</h1>
-      {!isAuthenticated ? (
-        <>
-          <LoginForm onLogin={handleLogin} isPosting={isPosting} />
-          <p className="register-link">
-            Not a user yet? <Link to="/register">Click here to create an account</Link>
-          </p>
-        </>
-      ) : (
-        <p>Already Logged In</p>
-      )}
-    </div>
+  <h1>{t('login')}</h1>
+  {!isAuthenticated ? (
+    <>
+      <LoginForm onLogin={handleLogin} isPosting={isPosting} />
+      <p className="register-link">
+        {t('notAUserYet')} <Link to="/register">{t('createAccount')}</Link>
+      </p>
+    </>
+  ) : (
+    <p>{t('alreadyLoggedIn')}</p>
+  )}
+</div>
   );
 };
 

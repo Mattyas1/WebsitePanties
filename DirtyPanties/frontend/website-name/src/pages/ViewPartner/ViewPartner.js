@@ -5,6 +5,8 @@ import { AuthContext } from '../../context/AuthContext';
 import { API_BASE_URL } from '../../constants';
 import ProductList from '../../components/ProductList/ProductList'; // Ensure correct path
 import './ViewPartner.css';
+import { useTranslation } from 'react-i18next';
+
 
 const ViewPartner = () => {
   const { partnerId } = useParams();
@@ -14,6 +16,8 @@ const ViewPartner = () => {
   const [error, setError] = useState(null);
   const [subscriptionError, setSubscriptionError] = useState(null);
   const {isAuthenticated, user, setUser} = useContext(AuthContext);
+  const { t } = useTranslation();
+
 
   useEffect(() => {
     const fetchPartnerAndProducts = async () => {
@@ -72,19 +76,19 @@ const ViewPartner = () => {
 
   return (
     <div className='view-partner'>
-      <button className="back-button" onClick={() => navigate(-1)}>Back</button>
+      <button className="back-button" onClick={() => navigate(-1)}>{t('back')}</button>
       <h1>{partner.username}</h1>
       {isSubscribed ? (
-        <button className="subscribe-button" onClick={handleSubscribeClick}>Unsubscribe</button>
+        <button className="subscribe-button" onClick={handleSubscribeClick}>{t('unsubscribe')}</button>
       ) : (
-        <button className="subscribe-button" onClick={handleSubscribeClick}>Subscribe</button>
+        <button className="subscribe-button" onClick={handleSubscribeClick}>{t('subscribe')}</button>
       )}
       {subscriptionError && <p className="error-message">{subscriptionError}</p>}
-      <h2>Products on Sale</h2>
+      <h2>{t('productsOnSale')}</h2>
       {partner.sellingProducts && partner.sellingProducts.length > 0 ? (
         <ProductList products={partner.sellingProducts.map(sp => sp.productId)} />
       ) : (
-        <p>No products available</p>
+        <p>{t('noProductsAvailable')}</p>
       )}
     </div>
   );

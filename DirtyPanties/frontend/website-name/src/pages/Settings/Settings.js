@@ -3,6 +3,8 @@ import axios from 'axios';
 import './Settings.css';
 import { API_BASE_URL } from '../../constants';
 import { LanguageContext } from '../../context/LanguageContext'; // Import LanguageContext
+import { useTranslation } from 'react-i18next';
+
 
 const Settings = () => {
   const [settings, setSettings] = useState({
@@ -13,7 +15,9 @@ const Settings = () => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
 
-  const { updateLanguage } = useContext(LanguageContext); // Access updateLanguage from LanguageContext
+  const { updateLanguage } = useContext(LanguageContext);
+  const { t } = useTranslation();
+
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -65,10 +69,10 @@ const Settings = () => {
 
   return (
     <div className="settings-container">
-      <h1>Settings</h1>
+      <h1>{t('settings')}</h1>
 
       <div className="settings-section">
-        <h2>Language</h2>
+        <h2>{t('language')}</h2>
         <select
           name="language"
           value={settings.language}
@@ -76,12 +80,12 @@ const Settings = () => {
           className="settings-select"
         >
           <option value="en">English</option>
-          <option value="fr">French</option>
+          <option value="fr">Français</option>
         </select>
       </div>
 
       <div className="settings-section">
-        <h2>Preferences</h2>
+        <h2>{t('preferences')}</h2>
         <label>
           <input
             type="checkbox"
@@ -89,7 +93,7 @@ const Settings = () => {
             checked={settings.notifications}
             onChange={handleSettingChange}
           />
-          Receive Notifications
+          {t('receiveNotifications')}
         </label>
         <label>
           <input
@@ -98,26 +102,26 @@ const Settings = () => {
             checked={settings.emailUpdates}
             onChange={handleSettingChange}
           />
-          Receive Email Updates
+          {t('receiveEmailUpdates')}
         </label>
       </div>
 
       <div className="settings-section">
-        <h2>Account</h2>
+        <h2>{t('account')}</h2>
         <button className="settings-button" onClick={handleChangePassword}>
-          Change Password
+          {t('changePassword')}
         </button>
         <button className="settings-button" onClick={handleChangeEmail}>
-          Change Email
+          {t('changeEmail')}
         </button>
       </div>
 
       {showPasswordModal && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>Change Password</h2>
+            <h2>{t('changePassword')}</h2>
             {/* Password change form goes here */}
-            <button onClick={closeModal}>Close</button>
+            <button onClick={closeModal}>{t('close')}</button>
           </div>
         </div>
       )}
@@ -125,13 +129,14 @@ const Settings = () => {
       {showEmailModal && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>Change Email</h2>
+            <h2>{t('changeEmail')}</h2>
             {/* Email change form goes here */}
-            <button onClick={closeModal}>Close</button>
+            <button onClick={closeModal}>{t('close')}</button>
           </div>
         </div>
       )}
     </div>
+
   );
 };
 

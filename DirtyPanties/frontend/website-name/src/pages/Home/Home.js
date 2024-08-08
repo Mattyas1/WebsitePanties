@@ -7,7 +7,7 @@ import { API_BASE_URL } from '../../constants';
 import { AuthContext } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 
-const Home = () => {
+const Home = () => { 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -68,21 +68,21 @@ const Home = () => {
       <h1>{t('home')}</h1>
       {isAuthenticated && (
         <>
-          <h2>Subscribed Partners</h2>
+          <h2>{t('subscribedPartners')}</h2>
           {subscribedPartners.length > 0 ? (
             <PartnerList partners={subscribedPartners} />
           ) : (
-            <p>No subscribed partners found.</p>
+            <p>{t('noSubscribedPartners')}</p>
           )}
-          <h2>Favorite Products</h2>
+          <h2>{t('favoriteProducts')}</h2>
           {favoriteProducts.length > 0 ? (
             <ProductList products={favoriteProducts} />
           ) : (
-            <p>No favorite products found.</p>
+            <p>{t('noFavoriteProducts')}</p>
           )}
         </>
       )}
-      <h2>Most Recent Products</h2>
+      <h2>{t('mostRecentProducts')}</h2>
       <ProductList products={products} />
     </div>
   );

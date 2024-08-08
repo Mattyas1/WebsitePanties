@@ -8,10 +8,10 @@ i18n
   .use(LanguageDetector) 
   .use(initReactI18next) 
   .init({
-    fallbackLng: 'fr', // Default language if detection fails
+    fallbackLng: 'fr', 
     debug: true,  //can be turned on after development
     interpolation: {
-      escapeValue: false, // React already escapes variables
+      escapeValue: false, 
     },
     backend: {
       loadPath: '/locales/{{lng}}/translation.json',

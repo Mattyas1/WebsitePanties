@@ -4,10 +4,12 @@ import { AuthContext } from '../../context/AuthContext';
 import './BecomePartner.css';
 import axios from 'axios';
 import { API_BASE_URL } from '../../constants';
+import { useTranslation } from 'react-i18next';
 
 const BecomePartner = () => {
   const { isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [formData, setFormData] = useState({
     phoneNumber: '',
@@ -124,10 +126,10 @@ const BecomePartner = () => {
 
   return (
     <div className="become-partner-container">
-      <h1>Become a Partner</h1>
+      <h1>{t('becomePartner')}</h1>
       {!partnerApplication && (
         <p className="intro-text">
-          Fill out the form below to apply to become a partner. Our team will review your application and contact you if your profile matches our requirements.
+          {t('partnerApplicationIntro')}
         </p>
       )}
       {isAuthenticated ? (
@@ -135,7 +137,7 @@ const BecomePartner = () => {
           editMode ? (
             <form onSubmit={handleSubmit} className="become-partner-form">
               <div className="form-group">
-                <label htmlFor="phoneNumber">Phone Number:</label>
+                <label htmlFor="phoneNumber">{t('phoneNumber')}:</label>
                 <input
                   type="text"
                   id="phoneNumber"
@@ -147,7 +149,7 @@ const BecomePartner = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="email">Email:</label>
+                <label htmlFor="email">{t('email')}:</label>
                 <input
                   type="email"
                   id="email"
@@ -159,7 +161,7 @@ const BecomePartner = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="post">Write a Post:</label>
+                <label htmlFor="post">{t('writePost')}:</label>
                 <textarea
                   id="post"
                   name="post"
@@ -170,7 +172,7 @@ const BecomePartner = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="images">Upload Images:</label>
+                <label htmlFor="images">{t('uploadImages')}:</label>
                 <input
                   type="file"
                   id="images"
@@ -181,62 +183,62 @@ const BecomePartner = () => {
               </div>
 
               <div className="form-buttons">
-                <button type="submit" className="submit-button">Submit</button>
-                <button type="button" className="cancel-button" onClick={() => setEditMode(false)}>Cancel</button>
+                <button type="submit" className="submit-button">{t('submit')}</button>
+                <button type="button" className="cancel-button" onClick={() => setEditMode(false)}>{t('cancel')}</button>
               </div>
             </form>
           ) : (
             <div className="application-details">
-              <h2 className="details-title">Your Application</h2>
+              <h2 className="details-title">{t('yourApplication')}</h2>
               <div className="details-info">
                 <div className="info-item">
-                  <strong>Status:</strong>
+                  <strong>{t('status')}:</strong>
                   <span className={`status ${partnerApplication.status}`}>{partnerApplication.status}</span>
                 </div>
                 <div className="info-item">
-                  <strong>Submitted on:</strong>
+                  <strong>{t('submittedOn')}:</strong>
                   <span>{new Date(partnerApplication.submissionDate).toLocaleDateString()}</span>
                 </div>
                 <div className="info-item">
-                  <strong>Phone Number:</strong>
+                  <strong>{t('phoneNumber')}:</strong>
                   <span>{partnerApplication.phoneNumber}</span>
                 </div>
                 <div className="info-item">
-                  <strong>Email:</strong>
+                  <strong>{t('email')}:</strong>
                   <span>{partnerApplication.email}</span>
                 </div>
                 <div className="info-item">
-                  <strong>Post:</strong>
+                  <strong>{t('post')}:</strong>
                   <span>{partnerApplication.post}</span>
                 </div>
               </div>
               <div className="images-container">
-                <h3 className="images-title">Images</h3>
+                <h3 className="images-title">{t('images')}</h3>
                 {partnerApplication.images.length > 0 ? (
                   <div className="images-grid">
                     {partnerApplication.images.map((image, index) => (
                       <img
                         key={index}
                         src={`${API_BASE_URL}/${image}`}
-                        alt={`Uploaded on ${new Date(partnerApplication.submissionDate).toLocaleDateString()}`}
+                        alt={t('uploadedOn') + new Date(partnerApplication.submissionDate).toLocaleDateString()}
                         className="application-image"
                       />
                     ))}
                   </div>
                 ) : (
-                  <p>No images uploaded.</p>
+                  <p>{t('noImagesUploaded')}</p>
                 )}
               </div>
               <div className="action-buttons">
-                <button className="edit-button" onClick={handleEditClick}>Edit Application</button>
-                <button className="delete-button" onClick={handleDeleteClick}>Delete Application</button>
+                <button className="edit-button" onClick={handleEditClick}>{t('editApplication')}</button>
+                <button className="delete-button" onClick={handleDeleteClick}>{t('deleteApplication')}</button>
               </div>
             </div>
           )
         ) : (
           <form onSubmit={handleSubmit} className="become-partner-form">
             <div className="form-group">
-              <label htmlFor="phoneNumber">Phone Number:</label>
+              <label htmlFor="phoneNumber">{t('phoneNumber')}:</label>
               <input
                 type="text"
                 id="phoneNumber"
@@ -248,7 +250,7 @@ const BecomePartner = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="email">Email:</label>
+              <label htmlFor="email">{t('email')}:</label>
               <input
                 type="email"
                 id="email"
@@ -260,7 +262,7 @@ const BecomePartner = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="post">Write a Post:</label>
+              <label htmlFor="post">{t('writePost')}:</label>
               <textarea
                 id="post"
                 name="post"
@@ -271,7 +273,7 @@ const BecomePartner = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="images">Upload Images:</label>
+              <label htmlFor="images">{t('uploadImages')}:</label>
               <input
                 type="file"
                 id="images"
@@ -281,28 +283,29 @@ const BecomePartner = () => {
               />
             </div>
 
-            <button type="submit" className="submit-button">Submit</button>
+            <button type="submit" className="submit-button">{t('submit')}</button>
           </form>
         )
       ) : (
         <div className="login-prompt">
-          <p>You need to be logged in to apply to become a partner.</p>
-          <button onClick={() => navigate('/login')} className="login-button">Log In</button>
+          <p>{t('loginPrompt')}</p>
+          <button onClick={() => navigate('/login')} className="login-button">{t('logIn')}</button>
         </div>
       )}
       {deleteModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h3>Confirm Deletion</h3>
-            <p>Are you sure you want to delete your application? This action cannot be undone.</p>
+            <h3>{t('confirmDeletion')}</h3>
+            <p>{t('deleteConfirmationMessage')}</p>
             <div className="modal-buttons">
-              <button className="confirm-button" onClick={handleDeleteConfirm}>Yes, Delete</button>
-              <button className="cancel-button" onClick={handleDeleteCancel}>Cancel</button>
+              <button className="confirm-button" onClick={handleDeleteConfirm}>{t('yesDelete')}</button>
+              <button className="cancel-button" onClick={handleDeleteCancel}>{t('cancel')}</button>
             </div>
           </div>
         </div>
       )}
     </div>
+
   );
 };
 

@@ -6,6 +6,8 @@ import { API_BASE_URL } from '../../constants';
 import Modal from 'react-modal';
 import RefundRequestList from '../../components/RefundRequestList/RefundRequestList';
 import './Refund.css';
+import { useTranslation } from 'react-i18next';
+
 
 Modal.setAppElement('#root'); // Make sure to bind modal to your appElement
 
@@ -21,6 +23,8 @@ const Refund = () => {
   const [amountError, setAmountError] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [requests, setRequests] = useState([]);
+  const { t } = useTranslation();
+
 
   const fetchRequests = async () => {
     try {
@@ -135,83 +139,84 @@ const Refund = () => {
 
   return (
     <div className="refund-container">
-      <h1>Request a Refund</h1>
-      <p>Enter the amount you want to refund and provide your bank details.</p>
-      <form onSubmit={(e) => e.preventDefault()}>
-        <div className="input-group">
-          <input
-            type="number"
-            min="1"
-            step="0.01"
-            value={refundAmount}
-            onChange={handleRefundAmountChange}
-            placeholder="Enter refund amount"
-          />
-          {amountError && <p className="error-message">{amountError}</p>}
-        </div>
-        <input
-          type="text"
-          value={iban}
-          onChange={handleIbanChange}
-          placeholder="Enter your IBAN"
-        />
-        <input
-          type="text"
-          value={bic}
-          onChange={handleBicChange}
-          placeholder="Enter your BIC/SWIFT"
-        />
-        <input
-          type="text"
-          value={accountHolderName}
-          onChange={handleAccountHolderNameChange}
-          placeholder="Enter account holder's name"
-        />
-        <input
-          type="text"
-          value={accountHolderAddress}
-          onChange={handleAccountHolderAddressChange}
-          placeholder="Enter account holder's address"
-        />
-        <input
-          type="text"
-          value={bankName}
-          onChange={handleBankNameChange}
-          placeholder="Enter bank name"
-        />
-        <input
-          type="text"
-          value={bankAddress}
-          onChange={handleBankAddressChange}
-          placeholder="Enter bank address"
-        />
-        <button type="button" onClick={openModal}>Request Refund</button>
-      </form>
-
-      <RefundRequestList requests={requests} />
-
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        contentLabel="Confirm Refund Request"
-        className="refund-modal"
-        overlayClassName="refund-modal-overlay"
-      >
-        <h2>Confirm Refund Request</h2>
-        <p>Refund Amount: ${refundAmount}</p>
-        <p>IBAN: {iban}</p>
-        <p>BIC/SWIFT: {bic}</p>
-        <p>Account Holder's Name: {accountHolderName}</p>
-        <p>Account Holder's Address: {accountHolderAddress}</p>
-        <p>Bank Name: {bankName}</p>
-        <p>Bank Address: {bankAddress}</p>
-        <p>Note: Refunds can take up to 2 weeks to be processed. Please make sure the above information is correct. Lust Auction will not be held responsible if not.</p>
-        <div className="modal-actions">
-          <button onClick={handleRefundSubmit}>Confirm</button>
-          <button onClick={closeModal}>Cancel</button>
-        </div>
-      </Modal>
+  <h1>{t('requestRefund')}</h1>
+  <p>{t('enterRefundDetails')}</p>
+  <form onSubmit={(e) => e.preventDefault()}>
+    <div className="input-group">
+      <input
+        type="number"
+        min="1"
+        step="0.01"
+        value={refundAmount}
+        onChange={handleRefundAmountChange}
+        placeholder={t('refundAmountPlaceholder')}
+      />
+      {amountError && <p className="error-message">{amountError}</p>}
     </div>
+    <input
+      type="text"
+      value={iban}
+      onChange={handleIbanChange}
+      placeholder={t('ibanPlaceholder')}
+    />
+    <input
+      type="text"
+      value={bic}
+      onChange={handleBicChange}
+      placeholder={t('bicPlaceholder')}
+    />
+    <input
+      type="text"
+      value={accountHolderName}
+      onChange={handleAccountHolderNameChange}
+      placeholder={t('accountHolderNamePlaceholder')}
+    />
+    <input
+      type="text"
+      value={accountHolderAddress}
+      onChange={handleAccountHolderAddressChange}
+      placeholder={t('accountHolderAddressPlaceholder')}
+    />
+    <input
+      type="text"
+      value={bankName}
+      onChange={handleBankNameChange}
+      placeholder={t('bankNamePlaceholder')}
+    />
+    <input
+      type="text"
+      value={bankAddress}
+      onChange={handleBankAddressChange}
+      placeholder={t('bankAddressPlaceholder')}
+    />
+    <button type="button" onClick={openModal}>{t('requestRefundButton')}</button>
+  </form>
+
+  <RefundRequestList requests={requests} />
+
+  <Modal
+    isOpen={isModalOpen}
+    onRequestClose={closeModal}
+    contentLabel={t('confirmRefundRequest')}
+    className="refund-modal"
+    overlayClassName="refund-modal-overlay"
+  >
+    <h2>{t('confirmRefundRequest')}</h2>
+    <p>{t('refundAmount')}: ${refundAmount}</p>
+    <p>{t('iban')}: {iban}</p>
+    <p>{t('bic')}: {bic}</p>
+    <p>{t('accountHolderName')}: {accountHolderName}</p>
+    <p>{t('accountHolderAddress')}: {accountHolderAddress}</p>
+    <p>{t('bankName')}: {bankName}</p>
+    <p>{t('bankAddress')}: {bankAddress}</p>
+    <p>{t('refundNote')}</p>
+    <div className="modal-actions">
+      <button onClick={handleRefundSubmit}>{t('confirm')}</button>
+      <button onClick={closeModal}>{t('cancel')}</button>
+    </div>
+  </Modal>
+</div>
+
   );
 };
 

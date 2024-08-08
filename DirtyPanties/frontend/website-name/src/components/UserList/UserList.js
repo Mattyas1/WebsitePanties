@@ -1,9 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './UserList.css';
+import { useTranslation } from 'react-i18next';
+
+
 
 const UserList = ({ users }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleRowClick = (userId) => {
     navigate(`/admin/users/${userId}`);
@@ -11,16 +15,16 @@ const UserList = ({ users }) => {
 
   return (
     <div className="user-list">
-      <h1>User List</h1>
+      <h1>{t('userList')}</h1>
       {users.length === 0 ? (
-        <p>No users found.</p>
+        <p>{t('noUsersFound')}</p>
       ) : (
         <table>
           <thead>
             <tr>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Wallet Amount</th>
+              <th>{t('username')}</th>
+              <th>{t('email')}</th>
+              <th>{t('walletAmount')}</th>
             </tr>
           </thead>
           <tbody>

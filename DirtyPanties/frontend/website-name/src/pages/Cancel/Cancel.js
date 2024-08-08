@@ -2,21 +2,26 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Cancel.css'; // Import the CSS file
+import './Cancel.css'; 
+import { useTranslation } from 'react-i18next';
+
 
 const Cancel = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
 
   return (
     <div className="cancel-page">
       <div className="cancel-content">
-        <h1>Transaction Cancelled</h1>
-        <p>It looks like you cancelled the payment process.</p>
-        <p>If you need assistance or wish to try again, please use the button below.</p>
-        <button className="retry-button" onClick={() => navigate('/')}>Go to Home</button>
-        <button className="retry-button" onClick={() => navigate('/rechargewallet')}>Try Again</button>
+        <h1>{t('transactionCancelled')}</h1>
+        <p>{t('paymentCancelled')}</p>
+        <p>{t('assistanceMessage')}</p>
+        <button className="retry-button" onClick={() => navigate('/')} >{t('goToHome')}</button>
+        <button className="retry-button" onClick={() => navigate('/rechargewallet')} >{t('tryAgain')}</button>
       </div>
     </div>
+
   );
 };
 

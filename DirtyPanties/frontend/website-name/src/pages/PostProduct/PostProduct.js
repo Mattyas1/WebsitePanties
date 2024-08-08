@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from '../../constants';
-import './PostProduct.css'; // For styles
+import './PostProduct.css'; 
+import { useTranslation } from 'react-i18next';
+
 
 const PostProduct = () => {
   const [product, setProduct] = useState({
@@ -21,7 +23,9 @@ const PostProduct = () => {
   const [partners, setPartners] = useState([]);
   const [loadingPartners, setLoadingPartners] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+
 
   useEffect(() => {
     const fetchPartners = async () => {
@@ -88,11 +92,11 @@ const PostProduct = () => {
 
   return (
     <div className="post-product-container">
-      <button className="back-button" onClick={() => navigate(-1)}>Back</button>
-      <h1>Add New Product</h1>
+      <button className="back-button" onClick={() => navigate(-1)}>{t('back')}</button>
+      <h1>{t('addNewProduct')}</h1>
       <form onSubmit={handleSubmit}>
         <label>
-          Name:
+          {t('name')}:
           <input
             type="text"
             name="name"
@@ -102,20 +106,20 @@ const PostProduct = () => {
           />
         </label>
         <label>
-          Category:
+          {t('category')}:
           <select
             name="category"
             value={product.category}
             onChange={handleChange}
             required
           >
-            <option value="Clothing">Clothing</option>
-            <option value="Toy">Toy</option>
+            <option value="Clothing">{t('clothing')}</option>
+            <option value="Toy">{t('toy')}</option>
             {/* Add other categories as needed */}
           </select>
         </label>
         <label>
-          Price:
+          {t('price')}:
           <input
             type="number"
             name="price"
@@ -125,7 +129,7 @@ const PostProduct = () => {
           />
         </label>
         <label>
-          Description:
+          {t('description')}:
           <textarea
             name="description"
             value={product.description}
@@ -134,7 +138,7 @@ const PostProduct = () => {
           />
         </label>
         <label>
-          Images:
+          {t('images')}:
           <input
             type="file"
             name="images"
@@ -144,7 +148,7 @@ const PostProduct = () => {
           />
         </label>
         <label>
-          Auction Date:
+          {t('auctionDate')}:
           <input
             type="date"
             name="auctionDate"
@@ -154,7 +158,7 @@ const PostProduct = () => {
           />
         </label>
         <label>
-          Apparition Link:
+          {t('apparitionLink')}:
           <input
             type="url"
             name="apparitionLink"
@@ -164,14 +168,14 @@ const PostProduct = () => {
           />
         </label>
         <label>
-          Partner:
+          {t('partner')}:
           {loadingPartners ? (
-            <p>Loading partners...</p>
+            <p>{t('loadingPartners')}</p>
           ) : error ? (
-            <p>Error loading partners: {error}</p>
+            <p>{t('errorLoadingPartners')}: {error}</p>
           ) : (
             <select name="model" onChange={handlePartnerChange} required>
-              <option value="">Select a partner</option>
+              <option value="">{t('selectPartner')}</option>
               {partners.map(partner => (
                 <option key={partner._id} value={partner.username}>
                   {partner.username}
@@ -185,7 +189,7 @@ const PostProduct = () => {
         {product.category === 'Toy' && (
           <>
             <label>
-              Warranty:
+              {t('warranty')}:
               <input
                 type="text"
                 name="warranty"
@@ -199,7 +203,7 @@ const PostProduct = () => {
         {product.category === 'Clothing' && (
           <>
             <label>
-              Size:
+              {t('size')}:
               <input
                 type="text"
                 name="size"
@@ -208,7 +212,7 @@ const PostProduct = () => {
               />
             </label>
             <label>
-              Material:
+              {t('material')}:
               <input
                 type="text"
                 name="material"
@@ -219,9 +223,10 @@ const PostProduct = () => {
           </>
         )}
 
-        <button type="submit">Add Product</button>
+        <button type="submit">{t('addProduct')}</button>
       </form>
     </div>
+
   );
 };
 

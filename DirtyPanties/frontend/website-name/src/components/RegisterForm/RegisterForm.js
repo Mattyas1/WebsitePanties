@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from '../../constants';
 import './RegisterForm.css';
+import { useTranslation } from 'react-i18next';
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ const RegisterForm = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,17 +49,17 @@ const RegisterForm = () => {
   return (
     <form onSubmit={handleSubmit} className="register-form">
       <div>
-        <label>Birthdate:</label>
+        <label>{t('birthdate')}:</label>
         <input
           type="date"
-          name="birthDate"  // corrected to lowercase 'birthdate'
-          value={formData.birthDate}  // corrected to lowercase 'birthdate'
+          name="birthDate"
+          value={formData.birthDate}
           onChange={handleChange}
           required
         />
       </div>
       <div>
-        <label>Email:</label>
+        <label>{t('email')}:</label>
         <input
           type="email"
           name="email"
@@ -67,7 +69,7 @@ const RegisterForm = () => {
         />
       </div>
       <div>
-        <label>Username:</label>
+        <label>{t('username')}:</label>
         <input
           type="text"
           name="username"
@@ -77,7 +79,7 @@ const RegisterForm = () => {
         />
       </div>
       <div>
-        <label>Password:</label>
+        <label>{t('password')}:</label>
         <input
           type="password"
           name="password"
@@ -87,7 +89,7 @@ const RegisterForm = () => {
         />
       </div>
       <button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Registering...' : 'Register'}
+        {isSubmitting ? t('registering') : t('register')}
       </button>
     </form>
   );

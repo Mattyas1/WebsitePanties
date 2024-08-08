@@ -4,11 +4,14 @@ import { API_BASE_URL } from "../../constants";
 import axios from "axios";
 import "./Partners.css";
 import PartnerList from "../../components/PartnerList/PartnerList";
+import { useTranslation } from 'react-i18next';
+
 
 const Partners = () => {
   const [partners, setPartners] = useState([]);
   const [loadingPartners, setLoadingPartners] = useState(true);
   const [error, setError] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchPartners = async () => {
@@ -29,12 +32,12 @@ const Partners = () => {
 
   return (
     <div className="partner-container">
-      <button className="back-button" onClick={() => navigate(-1)}>Back</button>
-      <h1>Our Partners</h1>
+      <button className="back-button" onClick={() => navigate(-1)}>{t('back')}</button>
+      <h1>{t('ourPartners')}</h1>
       {loadingPartners ? (
-        <p>Loading...</p>
+        <p>{t('loading')}</p>
       ) : error ? (
-        <p>Error: {error}</p>
+        <p>{t('error')}: {error}</p>
       ) : (
         <PartnerList partners={partners} />
       )}

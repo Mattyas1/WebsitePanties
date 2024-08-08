@@ -7,6 +7,8 @@ import { faBell } from '@fortawesome/free-solid-svg-icons';
 import { AuthContext } from '../../context/AuthContext'; 
 import { useWebSocket } from '../../context/WebSocketContext';
 import Cookies from 'js-cookie';
+import { useTranslation } from 'react-i18next';
+
 
 const Header = () => {
   const { isAuthenticated, user, setUser, setIsAuthenticated } = useContext(AuthContext);
@@ -15,7 +17,8 @@ const Header = () => {
   const navigate = useNavigate();
 
   const {socket, ready, registerMessageHandler, unregisterMessageHandler} = useWebSocket();
-  
+  const { t } = useTranslation();
+
   const dropdownRef = useRef(null);
   const notificationsRef = useRef(null);
   const bellIconRef = useRef(null);
@@ -125,9 +128,9 @@ const Header = () => {
     <header>
       <img src={logo} alt="Logo" onClick={() => navigate('/')} />
       <nav>
-        <Link className='become-partner-link' to="/becomepartner">Become Partner</Link>
-        <Link className='home-link' to="/">Home</Link>
-        <Link className='partners-link' to="/partners">Partners</Link>
+        <Link className='become-partner-link' to="/becomepartner">{t('becomePartner')}</Link>
+        <Link className='home-link' to="/">{t('home')}</Link>
+        <Link className='partners-link' to="/partners">{t('partners')}</Link>
         {isAuthenticated ? (
           <>
             <div className="notification-icon" onClick={toggleNotifications} ref={bellIconRef}>
@@ -143,30 +146,30 @@ const Header = () => {
                     </div>
                   ))
                 ) : (
-                  <div className="notification-item">No notifications</div>
+                  <div className="notification-item">{t('noNotifications')}</div>
                 )}
               </div>
             )}
             <div className="dropdown" ref={dropdownRef}>
-              <button onClick={toggleDropdown}>My Account</button>
+              <button onClick={toggleDropdown}>{t('myAccount')}</button>
               {showDropdown && (
                 <div className="dropdown-content">
-                  <button onClick={handleSettings}>Settings</button>
-                  <button onClick={handleWallet}>Wallet</button>
-                  <button onClick={handleHistory}>History</button>
+                  <button onClick={handleSettings}>{t('settings')}</button>
+                  <button onClick={handleWallet}>{t('wallet')}</button>
+                  <button onClick={handleHistory}>{t('history')}</button>
                   {user.role === 'admin' && (
-                    <button onClick={handleAdmin}>ADMIN</button>
+                    <button onClick={handleAdmin}>{t('admin')}</button>
                   )}
-                  <button onClick={handleLogout}>Logout</button>
+                  <button onClick={handleLogout}>{t('logout')}</button>
                 </div>
               )}
               <div className="user-wallet">
-                {user?.wallet.amount !== undefined ? `${user.wallet.amount} $` : 'Loading wallet...'}
+                {user?.wallet.amount !== undefined ? `${user.wallet.amount} $` : t('loadingWallet')}
               </div>
             </div>
           </>
         ) : (
-          <Link className= "login-link" to="/login">Log in</Link>
+          <Link className="login-link" to="/login">{t('login')}</Link>
         )}
       </nav>
     </header>
