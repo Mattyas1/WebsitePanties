@@ -25,6 +25,7 @@ import RefundRequestsManager from './pages/RefundRequestsManager/RefundRequestsM
 import UserManager from './pages/UserManager/UserManager';
 import ViewUserAdmin from './pages/ViewUserAdmin/ViewUserAdmin';
 import { AuthProvider } from './context/AuthContext';
+import { LanguageProvider } from './context/LanguageContext';
 import axios from 'axios';
 import AdminRoute from './components/AdminRoute';
 import {WebSocketProvider} from './context/WebSocketContext';
@@ -34,38 +35,40 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <WebSocketProvider>
-        <Router>
-          <Header />
-          <main>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/partners" element= {<Partners/>} />
-              <Route path="/becomepartner" element= {<BecomePartner/>} />
-              <Route path="/viewpartner/:partnerId" element={<ViewPartner/>} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/resetpassword" element={<ResetPassword />} />
-              <Route path="/newpassword/:token" element={<NewPassword />} />
-              <Route path="/wallet" element={<Wallet/>} />
-              <Route path="/refund" element={<Refund/>} />
-              <Route path="/settings" element = {<Settings />} />
-              <Route path= "/viewproduct/:productId" element={<ViewProduct/>} />
-              <Route path="/register" element = {<Register />} />
-              <Route path='/admindashboard' element = {<AdminRoute><AdminDashboard/></AdminRoute>} />
-              <Route path="/success" element = {<Success />} />
-              <Route path="/cancel" element = {<Cancel />} />
-              <Route path="/history" element = {<History />} />
-              <Route path='/admindashboard' element = {<AdminRoute><AdminDashboard/></AdminRoute>} />
-              <Route path="/admin/postproduct" element = {<AdminRoute><PostProductForm /></AdminRoute>} />
-              <Route path="/admin/refundrequests" element = {<AdminRoute><RefundRequestsManager /></AdminRoute>} />
-              <Route path="/admin/users" element = {<AdminRoute><UserManager /></AdminRoute>} />
-              <Route path="/admin/users/:userId" element = {<AdminRoute><ViewUserAdmin /></AdminRoute>} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </main>
-          <Footer />
-        </Router>
-      </WebSocketProvider>
+      <LanguageProvider>
+        <WebSocketProvider>
+          <Router>
+            <Header />
+            <main>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/partners" element= {<Partners/>} />
+                <Route path="/becomepartner" element= {<BecomePartner/>} />
+                <Route path="/viewpartner/:partnerId" element={<ViewPartner/>} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/resetpassword" element={<ResetPassword />} />
+                <Route path="/newpassword/:token" element={<NewPassword />} />
+                <Route path="/wallet" element={<Wallet/>} />
+                <Route path="/refund" element={<Refund/>} />
+                <Route path="/settings" element = {<Settings />} />
+                <Route path= "/viewproduct/:productId" element={<ViewProduct/>} />
+                <Route path="/register" element = {<Register />} />
+                <Route path='/admindashboard' element = {<AdminRoute><AdminDashboard/></AdminRoute>} />
+                <Route path="/success" element = {<Success />} />
+                <Route path="/cancel" element = {<Cancel />} />
+                <Route path="/history" element = {<History />} />
+                <Route path='/admindashboard' element = {<AdminRoute><AdminDashboard/></AdminRoute>} />
+                <Route path="/admin/postproduct" element = {<AdminRoute><PostProductForm /></AdminRoute>} />
+                <Route path="/admin/refundrequests" element = {<AdminRoute><RefundRequestsManager /></AdminRoute>} />
+                <Route path="/admin/users" element = {<AdminRoute><UserManager /></AdminRoute>} />
+                <Route path="/admin/users/:userId" element = {<AdminRoute><ViewUserAdmin /></AdminRoute>} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+            <Footer />
+          </Router>
+        </WebSocketProvider>
+      </LanguageProvider>
     </AuthProvider>
   );
 };

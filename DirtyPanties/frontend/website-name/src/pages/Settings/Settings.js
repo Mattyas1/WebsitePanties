@@ -1,33 +1,53 @@
-import React, { useState } from 'react';
-import './Settings.css'; // Import the CSS file
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import './Settings.css';
+import { API_BASE_URL } from '../../constants';
+import { LanguageContext } from '../../context/LanguageContext'; // Import LanguageContext
 
 const Settings = () => {
-  const [darkMode, setDarkMode] = useState(false);
-  const [language, setLanguage] = useState('en');
-  const [preferences, setPreferences] = useState({
+  const [settings, setSettings] = useState({
+    language: 'en',
     notifications: true,
     emailUpdates: true,
   });
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
 
-  const handleDarkModeToggle = () => {
-    setDarkMode(prevMode => !prevMode);
-    // You can add logic to save this setting if needed
-  };
+  const { updateLanguage } = useContext(LanguageContext); // Access updateLanguage from LanguageContext
 
-  const handleLanguageChange = (event) => {
-    setLanguage(event.target.value);
-    // You can add logic to save this setting if needed
-  };
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/api/user/settings`);
+        setSettings(response.data);
+      } catch (error) {
+        console.error('Error fetching user settings', error);
+      }
+    };
 
-  const handlePreferenceChange = (event) => {
-    const { name, checked } = event.target;
-    setPreferences(prevPreferences => ({
-      ...prevPreferences,
-      [name]: checked,
-    }));
-    // You can add logic to save these settings if needed
+    fetchSettings();
+  }, []);
+
+  const handleSettingChange = async (event) => {
+    const { name, value, type, checked } = event.target;
+    const newValue = type === 'checkbox' ? checked : value;
+
+    const updatedSettings = {
+      ...settings,
+      [name]: newValue,
+    };
+    setSettings(updatedSettings);
+
+    // Update language in LanguageContext if language setting changes
+    if (name === 'language') {
+      updateLanguage(newValue);
+    }
+
+    try {
+      await axios.put(`${API_BASE_URL}/api/user/settings`, updatedSettings);
+    } catch (error) {
+      console.error(`Error updating ${name} setting`, error);
+    }
   };
 
   const handleChangePassword = () => {
@@ -44,16 +64,19 @@ const Settings = () => {
   };
 
   return (
-    <div className={`settings-container ${darkMode ? 'dark-mode' : ''}`}>
+    <div className="settings-container">
       <h1>Settings</h1>
-      
+
       <div className="settings-section">
         <h2>Language</h2>
-        <select value={language} onChange={handleLanguageChange} className="settings-select">
+        <select
+          name="language"
+          value={settings.language}
+          onChange={handleSettingChange}
+          className="settings-select"
+        >
           <option value="en">English</option>
           <option value="fr">French</option>
-          <option value="es">Spanish</option>
-          {/* Add more languages as needed */}
         </select>
       </div>
 
@@ -63,8 +86,8 @@ const Settings = () => {
           <input
             type="checkbox"
             name="notifications"
-            checked={preferences.notifications}
-            onChange={handlePreferenceChange}
+            checked={settings.notifications}
+            onChange={handleSettingChange}
           />
           Receive Notifications
         </label>
@@ -72,22 +95,10 @@ const Settings = () => {
           <input
             type="checkbox"
             name="emailUpdates"
-            checked={preferences.emailUpdates}
-            onChange={handlePreferenceChange}
+            checked={settings.emailUpdates}
+            onChange={handleSettingChange}
           />
           Receive Email Updates
-        </label>
-      </div>
-
-      <div className="settings-section">
-        <h2>Display</h2>
-        <label>
-          <input
-            type="checkbox"
-            checked={darkMode}
-            onChange={handleDarkModeToggle}
-          />
-          Dark Mode
         </label>
       </div>
 
@@ -101,10 +112,9 @@ const Settings = () => {
         </button>
       </div>
 
-      {/* Modals for changing password and email */}
       {showPasswordModal && (
         <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h2>Change Password</h2>
             {/* Password change form goes here */}
             <button onClick={closeModal}>Close</button>
@@ -114,7 +124,7 @@ const Settings = () => {
 
       {showEmailModal && (
         <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h2>Change Email</h2>
             {/* Email change form goes here */}
             <button onClick={closeModal}>Close</button>

@@ -12,7 +12,6 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log("TRYING AUTO LOGIN")
     const checkAuth = async () => {
       let accessToken = Cookies.get('accessToken');
       if (!accessToken) {

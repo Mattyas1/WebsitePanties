@@ -2,7 +2,6 @@ import '../config/env.mjs';
 import mongoose from 'mongoose';
 import User from '../mongoose/schemas/User.mjs';
 
-
 const migrateUsers = async () => {
     try {
         // Connect to your MongoDB
@@ -11,24 +10,26 @@ const migrateUsers = async () => {
             useUnifiedTopology: true,
         });
 
-        // Find all users with the 'coins' property
-        const users = await User.find({ 'coins': { $exists: true } });
+        // Find all users
+        const users = await User.find();
 
         for (const user of users) {
-            // Convert coins to dollars
-            const amountInDollars = user.coins
-            console.log(user.coins)
-
-            // Update the user with the new wallet property
-            user.wallet = {
-                amount: amountInDollars
-            };
-
-            // Remove the old 'coins' property
-            user.coins = undefined;
+            // Set default settings if not already present
+            if (!user.settings) {
+                user.settings = {
+                    language: 'en',
+                    notifications: true,
+                    emailUpdates: true,
+                };
+            } else {
+                // Ensure each setting has a default value if not present
+                user.settings.language = user.settings.language || 'en';
+                user.settings.notifications = user.settings.notifications !== undefined ? user.settings.notifications : true;
+                user.settings.emailUpdates = user.settings.emailUpdates !== undefined ? user.settings.emailUpdates : true;
+            }
 
             await user.save();
-            console.log(`Updated user ${user._id} with $${amountInDollars}`);
+            console.log(`Updated user ${user._id} with settings: ${JSON.stringify(user.settings)}`);
         }
 
         console.log('Migration completed');

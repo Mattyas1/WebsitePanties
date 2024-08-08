@@ -1,32 +1,32 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const BidHistorySchema = new mongoose.Schema({
-    productId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Product',
-      required: true
-    },
-    productName : {
-      type: String,
-      required: true
-    },
-    bidAmount: {
-      type: Number,
-      required: true
-    },
-    bidDate: {
-      type: Date,
-      default: Date.now
-    }
-  });
-
-const  WinHistorySchema = new mongoose.Schema({
   productId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Product',
     required: true
   },
-  productName : {
+  productName: {
+    type: String,
+    required: true
+  },
+  bidAmount: {
+    type: Number,
+    required: true
+  },
+  bidDate: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+const WinHistorySchema = new mongoose.Schema({
+  productId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product',
+    required: true
+  },
+  productName: {
     type: String,
     required: true
   },
@@ -40,114 +40,125 @@ const  WinHistorySchema = new mongoose.Schema({
   }
 });
 
-  const NotificationSchema = new mongoose.Schema({
-    message: {
-      type: String,
-      required: true,
-    },
-    read: {
-      type: Boolean,
-      default: false,
-    },
-    date: {
-      type: Date,
-      default: Date.now,
-    },
-  });
+const NotificationSchema = new mongoose.Schema({
+  message: {
+    type: String,
+    required: true,
+  },
+  read: {
+    type: Boolean,
+    default: false,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const SettingsSchema = new mongoose.Schema({
+  language: {
+    type: String,
+    default: 'en'
+  },
+  notifications: {
+    type: Boolean,
+    default: true
+  },
+  emailUpdates: {
+    type: Boolean,
+    default: true
+  }
+});
 
 const UserSchema = new mongoose.Schema({
-    
-    birthDate: {
-        type: Date,
+  birthDate: {
+    type: Date,
+    required: true,
+  },
+  email: {
+    type: mongoose.Schema.Types.String,
+    required: true,
+    unique: true
+  },
+  resetPassword: {
+    token: { type: String },
+    expires: { type: Date },
+  },
+  username: {
+    type: mongoose.Schema.Types.String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: mongoose.Schema.Types.String,
+    required: true,
+  },
+  refreshToken: {
+    type: mongoose.Schema.Types.String,
+  },
+  wallet: {
+    amount: {
+      type: Number,
+      default: 0
+    }
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin', 'partner'],
+    default: 'user'
+  },
+  bidHistory: [BidHistorySchema],
+  winHistory: [WinHistorySchema],
+  notifications: [NotificationSchema],
+  favoriteProducts: [
+    {
+      productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
         required: true,
-    },
-    email: {
-        type: mongoose.Schema.Types.String,
-        required: true,
-        unique: true
-    },
-    resetPassword: {
-        token: { type: String },
-        expires: { type: Date },
-        },
-    username: {
-        type: mongoose.Schema.Types.String,
-        required: true,
-        unique: true,
-    },
-    password: {
-        type: mongoose.Schema.Types.String,
-        required: true,
-    },
-    refreshToken : {
-        type: mongoose.Schema.Types.String,
-    },
-    wallet: {
-      amount: {
-          type: Number,
-          default: 0
-      }
-    },
-    role: {
+      },
+      productName: {
         type: String,
-        enum: ['user', 'admin', 'partner'], 
-        default: 'user' 
-    },
-    bidHistory: [BidHistorySchema],
-    winHistory: [WinHistorySchema],
-    notifications: [NotificationSchema],
-    favoriteProducts: [
-      {
-        productId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Product',
-          required: true,
-        },
-        productName : {
-          type: String,
-          required: true
-        },
-      }
-    ],
-    subscribedPartners:  [
-      {
-        userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
-          required: true
-        },
-        username : {
-          type: String,
-          required: true
-        },
-      }
-    ],
-
-
-
-    sellingProducts: [
-      {
-        productId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Product',
-          required: true
-        },
-        productName : {
-          type: String,
-          required: true
-        },
-      }
-    ]
+        required: true
+      },
+    }
+  ],
+  subscribedPartners: [
+    {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+      },
+      username: {
+        type: String,
+        required: true
+      },
+    }
+  ],
+  sellingProducts: [
+    {
+      productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true
+      },
+      productName: {
+        type: String,
+        required: true
+      },
+    }
+  ],
+  settings: SettingsSchema 
 });
 
 UserSchema.pre('save', function(next) {
   // Remove properties that are not relevant for the current category
   if (this.role !== 'partner') {
     this.sellingProducts = undefined;
-  } 
+  }
   next();
 });
-
 
 const User = mongoose.model('User', UserSchema);
 

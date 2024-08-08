@@ -5,6 +5,7 @@ import './Home.css';
 import axios from 'axios';
 import { API_BASE_URL } from '../../constants';
 import { AuthContext } from '../../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -13,6 +14,7 @@ const Home = () => {
   const [favoriteProducts, setFavoriteProducts] = useState([]);
   const [subscribedPartners, setSubscribedPartners] = useState([]);
   const { isAuthenticated, user } = useContext(AuthContext);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -63,7 +65,7 @@ const Home = () => {
 
   return (
     <div className='home-container'>
-      <h1>HOME</h1>
+      <h1>{t('home')}</h1>
       {isAuthenticated && (
         <>
           <h2>Subscribed Partners</h2>

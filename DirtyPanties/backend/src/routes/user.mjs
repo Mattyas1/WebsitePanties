@@ -87,6 +87,49 @@ router.post('/api/user/resetPassword', async (req, res) => {
     }
   });
 
+  router.get('/api/user/settings', async (req,res)=> {
+    try {
+      const userId = req.session.userId;
+  
+      const user = await User.findById(userId).select('settings');
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      const userSettings = user.settings;
+      res.status(200).json(userSettings);
+    } catch (error) {
+      console.error('Error updating user settings:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  })
+
+  router.put('/api/user/settings',async (req,res) => {
+    try {
+      const userId = req.session.userId;
+      const { language, notifications, emailUpdates } = req.body;
+  
+      const updatedSettings = {
+        settings: {
+          language,
+          notifications,
+          emailUpdates,
+        },
+      };
+  
+      const user = await User.findByIdAndUpdate(userId, updatedSettings, { new: true });
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      res.status(200).json(user);
+    } catch (error) {
+      console.error('Error updating user settings:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+
   router.get('/api/user/:userId', async (req,res) => {
 
     const {userId} = req.params;
@@ -241,7 +284,6 @@ router.post('/api/user/resetPassword', async (req, res) => {
     }
   });
 
-  // server.js or routes file
 router.get('/api/user/:userId/history', async (req, res) => {
   const { userId } = req.params;
 
@@ -262,5 +304,7 @@ router.get('/api/user/:userId/history', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+
 
 export default router;
